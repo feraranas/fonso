@@ -12,6 +12,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     loadNotes: () => ipcRenderer.invoke('load-notes'),
     deleteNote: (noteId) => ipcRenderer.invoke('delete-note', noteId),
     
+    // Export/Import methods
+    exportNotes: () => ipcRenderer.invoke('export-notes'),
+    importNotes: (options) => ipcRenderer.invoke('import-notes', options),
+    
     // Event listeners for real-time updates
     onNotesUpdated: (callback) => {
         ipcRenderer.on('notes-updated', callback);

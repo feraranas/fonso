@@ -154,6 +154,13 @@ body {
     gap: 12px;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
 .notes-count {
     background: #e9ecef;
     color: #6c757d;
@@ -161,6 +168,43 @@ body {
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 600;
+}
+
+.export-import-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-export,
+.btn-import {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    border: 2px solid #e9ecef;
+    background: white;
+    color: #495057;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-export:hover {
+    background: #28a745;
+    color: white;
+    border-color: #28a745;
+    transform: translateY(-1px);
+}
+
+.btn-import:hover {
+    background: #17a2b8;
+    color: white;
+    border-color: #17a2b8;
+    transform: translateY(-1px);
+}
+
+.btn-export:active,
+.btn-import:active {
+    transform: translateY(0);
 }
 
 /* Search bar styles */

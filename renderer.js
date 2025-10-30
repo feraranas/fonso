@@ -22,6 +22,7 @@ async function initializeApp() {
     setupForm();
     setupDateField();
     setupSearch();
+    setupExportImport();
     setupNotesListener();
     await loadAndDisplayNotes();
     console.log('App initialized successfully!');
@@ -133,6 +134,114 @@ async function handleFormSubmit(event) {
         // Restore button state
         submitButton.textContent = originalText;
         submitButton.disabled = false;
+    }
+}
+
+/**
+ * Set up export/import functionality
+ */
+function setupExportImport() {
+    const exportBtn = document.getElementById('export-btn');
+    const importBtn = document.getElementById('import-btn');
+    
+    if (exportBtn) {
+        exportBtn.addEventListener('click', handleExport);
+    }
+    
+    if (importBtn) {
+        importBtn.addEventListener('click', handleImport);
+    }
+}
+
+/**
+ * Handle export button click
+ */
+async function handleExport() {
+    const exportBtn = document.getElementById('export-btn');
+    if (!exportBtn) return;
+    
+    // Disable button during export
+    const originalText = exportBtn.textContent;
+    exportBtn.textContent = '📤 Exporting...';
+    exportBtn.disabled = true;
+    
+    try {
+        const result = await window.electronAPI.exportNotes();
+        
+        if (result.canceled) {
+            // User canceled, no message needed
+            return;
+        }
+        
+        if (result.success) {
+            const fileName = result.filePath.split(/[/\\]/).pop();
+            showMessage(`Notes exported successfully to ${fileName}`, 'success');
+        } else {
+            showMessage(`Export failed: ${result.error}`, 'error');
+        }
+    } catch (error) {
+        console.error('Error exporting notes:', error);
+        showMessage('Error exporting notes. Please try again.', 'error');
+    } finally {
+        // Restore button state
+        exportBtn.textContent = originalText;
+        exportBtn.disabled = false;
+    }
+}
+
+/**
+ * Handle import button click
+ */
+async function handleImport() {
+    const importBtn = document.getElementById('import-btn');
+    if (!importBtn) return;
+    
+    // Check if there are existing notes
+    const hasExistingNotes = allNotes.length > 0;
+    
+    let replaceMode = false;
+    if (hasExistingNotes) {
+        // Ask user if they want to merge or replace
+        const userChoice = confirm(
+            'Do you want to REPLACE all existing notes with imported notes?\n\n' +
+            'Click OK to REPLACE all notes\n' +
+            'Click Cancel to MERGE (add new notes, keep existing ones)'
+        );
+        replaceMode = userChoice;
+    }
+    
+    // Disable button during import
+    const originalText = importBtn.textContent;
+    importBtn.textContent = '📥 Importing...';
+    importBtn.disabled = true;
+    
+    try {
+        const result = await window.electronAPI.importNotes({ replace: replaceMode });
+        
+        if (result.canceled) {
+            // User canceled, no message needed
+            return;
+        }
+        
+        if (result.success) {
+            let message = `Successfully imported ${result.imported} note${result.imported !== 1 ? 's' : ''}`;
+            if (result.skipped > 0) {
+                message += ` (${result.skipped} invalid note${result.skipped !== 1 ? 's' : ''} skipped)`;
+            }
+            if (result.total !== undefined) {
+                message += `. Total notes: ${result.total}`;
+            }
+            showMessage(message, 'success');
+        } else {
+            showMessage(`Import failed: ${result.error}`, 'error');
+        }
+    } catch (error) {
+        console.error('Error importing notes:', error);
+        showMessage('Error importing notes. Please check the file format.', 'error');
+    } finally {
+        // Restore button state
+        importBtn.textContent = originalText;
+        importBtn.disabled = false;
     }
 }
 
