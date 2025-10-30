@@ -3,15 +3,25 @@
   "version": "1.0.0",
   "description": "A simple Electron app for saving and managing interesting URLs with metadata",
   "main": "main.js",
+  "type": "module",
   "scripts": {
     "start": "electron .",
     "dev": "NODE_ENV=development electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "mcp-client": "node build/client.js"
   },
   "author": "Fernan Kiwi",
   "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@anthropic-ai/sdk": "^0.32.0",
+    "dotenv": "^16.4.5"
+  },
   "devDependencies": {
-    "electron": "^28.0.0"
+    "electron": "^28.0.0",
+    "typescript": "^5.3.3",
+    "@types/node": "^20.11.5"
   },
   "keywords": [
     "electron",

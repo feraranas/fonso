@@ -238,6 +238,156 @@
       ],
       "createdAt": "2025-10-30T00:00:00.000Z",
       "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8nanarray001",
+      "url": "https://nan-archive.vercel.app/how-arrays-work",
+      "title": "How Arrays Work — NAN Archive",
+      "summary": "An educational deep dive into the internal mechanisms of arrays, including memory allocation, indexing, and how array operations are implemented under the hood. A clear and approachable technical explanation for developers interested in data structures.",
+      "date": "2025-10-30T00:00",
+      "tags": ["cool pages", "programming", "data structures"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8arcaiweb002",
+      "url": "https://arc.net/l/quote/onlvfwij",
+      "title": "Practical Implications of AI on the Web — Arc Highlight",
+      "summary": "A highlighted passage discussing how AI is transforming the fabric of the web, from information retrieval to content generation and personalization. It emphasizes the interplay between automation, design, and digital interaction.",
+      "date": "2025-10-30T00:00",
+      "tags": ["ai web", "technology", "insight"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8gptoss003",
+      "url": "https://github.com/openai/gpt-oss?tab=readme-ov-file",
+      "title": "OpenAI GPT-OSS — Open Source Model Toolkit",
+      "summary": "The GPT-OSS repository provides an open-source framework by OpenAI for building, deploying, and evaluating GPT-based systems. It contains example integrations, utilities, and developer resources for experimenting with LLMs.",
+      "date": "2025-10-30T00:00",
+      "tags": ["openai", "libraries", "llm"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8openailibs004",
+      "url": "https://github.com/orgs/openai/repositories?type=all",
+      "title": "OpenAI — GitHub Repositories Overview",
+      "summary": "A directory of all official OpenAI repositories on GitHub, showcasing the breadth of projects across APIs, frameworks, datasets, and tools supporting the AI and developer ecosystem.",
+      "date": "2025-10-30T00:00",
+      "tags": ["openai", "libraries", "developer tools"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8cookbook005",
+      "url": "https://github.com/openai/openai-cookbook",
+      "title": "OpenAI Cookbook — Developer Recipes and Examples",
+      "summary": "The OpenAI Cookbook provides code samples, guides, and best practices for using OpenAI APIs and LLMs effectively. It covers topics like prompt engineering, embeddings, RAG workflows, and production deployment tips.",
+      "date": "2025-10-30T00:00",
+      "tags": ["openai", "libraries", "cookbook"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8aidepl006",
+      "url": "https://www.twitch.tv/ai_diplomacy/clip/HumbleSpikyWoodcockChocolateRain-6p8iNf3UIiVOUbZn",
+      "title": "AI Diplomacy — Twitch Clip",
+      "summary": "A Twitch clip from the AI Diplomacy project, showcasing interactions between AI agents and human players in the strategic negotiation game 'Diplomacy'. Highlights the social reasoning capabilities of language models.",
+      "date": "2025-10-30T00:00",
+      "tags": ["ai diplomacy", "ai agents", "games"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8duffy007",
+      "url": "https://every.to/diplomacy",
+      "title": "Alex Duffy — Diplomacy and AI Negotiation",
+      "summary": "Alex Duffy explores the intersection of AI and human negotiation through the game 'Diplomacy'. The article reflects on communication strategy, trust, and the evolving landscape of AI-driven reasoning in social contexts.",
+      "date": "2025-10-30T00:00",
+      "tags": ["ai diplomacy", "ai communication", "research"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8duffyx008",
+      "url": "https://x.com/alxai_",
+      "title": "Alex Duffy — X Profile",
+      "summary": "Alex Duffy’s X (Twitter) profile, where he shares insights about AI diplomacy, communication, and the creative frontiers of human–AI interaction.",
+      "date": "2025-10-30T00:00",
+      "tags": ["ai diplomacy", "social media", "ai research"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8goodstart009",
+      "url": "https://goodstartlabs.com/research",
+      "title": "Good Start Labs — Research Overview",
+      "summary": "Good Start Labs shares research and insights into AI systems, agent design, and innovation frameworks. Their work blends experimentation and practical engineering to explore emerging frontiers of applied intelligence.",
+      "date": "2025-10-30T00:00",
+      "tags": ["research", "ai labs", "innovation"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8mattshumer010",
+      "url": "https://x.com/mattshumer_/status/1981027089810637023",
+      "title": "Matt Shumer — Reflections on AI Progress",
+      "summary": "Matt Shumer shares insights and commentary on the rapid evolution of AI and its impact on creativity, productivity, and business transformation.",
+      "date": "2025-10-30T00:00",
+      "tags": ["cool articles", "ai", "commentary"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8terra011",
+      "url": "https://www.npr.org/2017/11/11/561217363/terra-incognita-the-planet-factory-and-the-undiscovered-islands",
+      "title": "Terra Incognita — NPR on 'The Planet Factory'",
+      "summary": "An NPR feature on 'The Planet Factory', exploring how scientists discover exoplanets and what these findings reveal about our place in the universe. The piece discusses the intersection of astronomy, curiosity, and exploration.",
+      "date": "2025-10-30T00:00",
+      "tags": ["cool articles", "science", "astronomy"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8arcfactory012",
+      "url": "https://arc.net/l/quote/jtosroaw",
+      "title": "Arc Highlight — Excerpt from 'The Planet Factory'",
+      "summary": "A highlighted section from 'The Planet Factory' discussing the scientific quest to find new worlds and understand planetary formation across the cosmos.",
+      "date": "2025-10-30T00:00",
+      "tags": ["cool articles", "astronomy", "science writing"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8amazon013",
+      "url": "https://www.amazon.com.mx/Planet-Factory-Exoplanets-Search-Second/dp/147291774X",
+      "title": "The Planet Factory — Exoplanets and the Search for a Second Earth",
+      "summary": "Elizabeth Tasker’s 'The Planet Factory' explores how scientists detect and study exoplanets, revealing the complex and surprising diversity of planetary systems across the galaxy.",
+      "date": "2025-10-30T00:00",
+      "tags": ["cool articles", "books", "astronomy"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8eric014",
+      "url": "https://eric-carle.com/resources/faq/",
+      "title": "Eric Carle — Resources & FAQ",
+      "summary": "The official Eric Carle website provides educational and artistic resources about his work, including insights into his creative process, books, and collage illustration techniques.",
+      "date": "2025-10-30T00:00",
+      "tags": ["art", "children books", "illustration"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "mhd8klee015",
+      "url": "https://www.paulklee.net/insula-dulcamara.jsp",
+      "title": "Paul Klee — Insula Dulcamara",
+      "summary": "Paul Klee’s 'Insula Dulcamara' is a late-career masterpiece blending abstraction, symbolism, and poetic geometry. The piece reflects Klee’s exploration of the border between imagination and structure.",
+      "date": "2025-10-30T00:00",
+      "tags": ["art", "painting", "modernism"],
+      "createdAt": "2025-10-30T00:00:00.000Z",
+      "updatedAt": "2025-10-30T00:00:00.000Z"
     }
   ]
 }

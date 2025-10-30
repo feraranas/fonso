@@ -49,12 +49,18 @@ function setupDateField() {
     const dateField = document.getElementById('date');
     
     if (dateField) {
-        // Set current date/time as default
+        // Set current date/time as default (using local time, not UTC)
         const now = new Date();
         // Format for datetime-local input (YYYY-MM-DDTHH:MM)
-        const formattedDate = now.toISOString().slice(0, 16);
+        // Use local time components instead of UTC to avoid timezone offset issues
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
         dateField.value = formattedDate;
-        console.log('Date field initialized with current date');
+        console.log('Date field initialized with current local date/time');
     }
 }
 
@@ -510,32 +516,35 @@ function createNoteCard(note) {
     const createdTime = new Date(note.createdAt).toLocaleTimeString();
     const tags = note.tags || [];
     
+    // Sanitize URL for safe use in href attributes
+    const safeUrl = sanitizeUrl(note.url);
+    
     // Generate tags HTML
     const tagsHTML = tags.length > 0 
         ? `<div class="note-tags">${tags.map(tag => createTagBadge(tag, true)).join('')}</div>`
         : '';
     
     return `
-        <div class="note-card" data-note-id="${note.id}">
+        <div class="note-card" data-note-id="${escapeHtml(note.id)}">
             <div class="note-header">
                 <h3 class="note-title">
-                    <a href="${note.url}" target="_blank" rel="noopener noreferrer">
+                    <a href="${safeUrl}" target="_blank" rel="noopener noreferrer">
                         ${escapeHtml(note.title)}
                     </a>
                 </h3>
-                <button class="btn-delete" data-note-id="${note.id}" title="Delete note">
+                <button class="btn-delete" data-note-id="${escapeHtml(note.id)}" title="Delete note">
                     🗑️
                 </button>
             </div>
             <div class="note-url">
-                <a href="${note.url}" target="_blank" rel="noopener noreferrer">
+                <a href="${safeUrl}" target="_blank" rel="noopener noreferrer">
                     ${escapeHtml(note.url)}
                 </a>
             </div>
             ${tagsHTML}
             ${note.summary ? `<div class="note-summary">${escapeHtml(note.summary)}</div>` : ''}
             <div class="note-meta">
-                <span class="note-date">Saved on ${createdDate} at ${createdTime}</span>
+                <span class="note-date">Saved on ${escapeHtml(createdDate)} at ${escapeHtml(createdTime)}</span>
             </div>
         </div>
     `;
@@ -719,4 +728,79 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+/**
+ * Sanitize URL for use in href attribute
+ * Validates URL scheme and returns safe URL or about:blank for dangerous URLs
+ * @param {string} url - URL to sanitize
+ * @returns {string} Sanitized URL safe for href attribute (HTML-escaped)
+ */
+function sanitizeUrl(url) {
+    if (!url || typeof url !== 'string') {
+        return 'about:blank';
+    }
+    
+    // Trim whitespace
+    url = url.trim();
+    
+    // Check for dangerous protocols (case-insensitive)
+    const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:', 'about:'];
+    const lowerUrl = url.toLowerCase();
+    
+    for (const protocol of dangerousProtocols) {
+        if (lowerUrl.startsWith(protocol)) {
+            console.warn('Blocked dangerous URL protocol:', url);
+            return 'about:blank';
+        }
+    }
+    
+    // Allow http, https, mailto, tel, and relative URLs
+    const allowedPatterns = [
+        /^https?:\/\//i,           // http:// or https://
+        /^mailto:/i,               // mailto:
+        /^tel:/i,                  // tel:
+        /^\//,                     // Absolute path
+        /^\.\//,                   // Relative path ./ 
+        /^\.\.\//                  // Relative path ../
+    ];
+    
+    const hasAllowedPattern = allowedPatterns.some(pattern => pattern.test(url));
+    
+    // If no protocol and doesn't look like a relative path, try to make it absolute
+    if (!hasAllowedPattern) {
+        // If it looks like a domain, add https://
+        const domainPattern = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+/;
+        if (domainPattern.test(url.split('/')[0].split('?')[0].split('#')[0])) {
+            url = 'https://' + url;
+        } else {
+            // Not a valid absolute or relative URL, block it
+            console.warn('Blocked invalid URL format:', url);
+            return 'about:blank';
+        }
+    }
+    
+    // Validate the URL and ensure it uses only allowed protocols
+    try {
+        // Try to parse as absolute URL
+        const urlObj = new URL(url, window.location.href);
+        const allowedProtocols = ['http:', 'https:', 'mailto:', 'tel:'];
+        
+        if (allowedProtocols.includes(urlObj.protocol)) {
+            // Escape HTML special characters for safe use in href attribute
+            return escapeHtml(urlObj.href);
+        } else {
+            console.warn('Blocked non-allowed protocol:', urlObj.protocol);
+            return 'about:blank';
+        }
+    } catch (e) {
+        // If URL parsing fails, check if it's a relative URL
+        if (url.startsWith('/') || url.startsWith('./') || url.startsWith('../')) {
+            // Relative URLs are safe, but still escape HTML special characters
+            return escapeHtml(url);
+        } else {
+            console.warn('Failed to parse URL:', url, e);
+            return 'about:blank';
+        }
+    }
 }
