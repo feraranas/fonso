@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": "mhcz6qn6w77neec7tbd",
+    "url": "https://every.to/source-code/inside-the-ai-workflows-of-every-s-six-engineers",
+    "title": "Inside the AI Workflows of Every’s Six Engineers",
+    "summary": "This article explain how 6 Engineers from the company Every are using AI to build stuff with Claude Code, Cursor, Amp, Codex, and some hack tips.",
+    "date": "2025-10-29T05:18",
+    "createdAt": "2025-10-30T05:20:04.962Z",
+    "updatedAt": "2025-10-30T05:20:04.962Z"
+  },
+  {
+    "id": "mhcz8d6fxu9i3joc5b",
+    "url": "https://mitchellh.com/writing",
+    "title": "Mitchel Hashimotto Personal Blog page",
+    "summary": "Mitchel Hashimotto is a true code craftsman. He build Hashi Corp company, responsible of Terraform, one of the pillars of DevOps.",
+    "date": "2025-10-30T05:20",
+    "createdAt": "2025-10-30T05:21:20.823Z",
+    "updatedAt": "2025-10-30T05:21:20.823Z"
+  }
+]
