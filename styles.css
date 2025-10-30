@@ -110,6 +110,14 @@ body {
     min-height: 100px;
 }
 
+.form-hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
 /* Button styles */
 .btn {
     padding: 12px 24px;
@@ -142,6 +150,8 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .notes-count {
@@ -325,6 +335,70 @@ body {
     color: white;
     opacity: 1;
     transform: scale(1.1);
+}
+
+/* Tag styles */
+.note-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.tag-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.tag-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.tag-badge.active {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+.tag-filter-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    background: #e9ecef;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    color: #495057;
+    margin-left: auto;
+}
+
+.tag-filter-indicator .tag-name {
+    font-weight: 600;
+    color: #667eea;
+}
+
+.tag-filter-indicator .btn-clear-tag-filter {
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+    margin-left: 4px;
+    transition: color 0.2s ease;
+}
+
+.tag-filter-indicator .btn-clear-tag-filter:hover {
+    color: #dc3545;
 }
 
 /* Responsive design */

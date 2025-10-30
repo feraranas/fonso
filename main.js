@@ -86,7 +86,12 @@ function setupIpcHandlers() {
     // Handle loading all notes
     ipcMain.handle('load-notes', async () => {
         console.log('Loading notes...');
-        return await loadNotes();
+        const notes = await loadNotes();
+        // Ensure backward compatibility: add empty tags array to notes without tags
+        return notes.map(note => ({
+            ...note,
+            tags: note.tags || []
+        }));
     });
 
     // Handle saving a new note
@@ -98,9 +103,11 @@ function setupIpcHandlers() {
             const notes = await loadNotes();
             
             // Add new note with ID and timestamp
+            // Ensure tags is always an array for backward compatibility
             const newNote = {
                 id: generateNoteId(),
                 ...noteData,
+                tags: noteData.tags || [],
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             };
