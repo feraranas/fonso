@@ -80,6 +80,28 @@
                     </div>
                 </div>
                 
+                <!-- Search bar -->
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <span class="search-icon">🔍</span>
+                        <input 
+                            type="text" 
+                            id="search-input" 
+                            class="search-input" 
+                            placeholder="Search notes by keyword..."
+                            autocomplete="off"
+                        >
+                        <button 
+                            id="clear-search-btn" 
+                            class="btn-clear-search" 
+                            title="Clear search"
+                            style="display: none;"
+                        >
+                            ✕
+                        </button>
+                    </div>
+                </div>
+                
                 <div id="notes-list" class="notes-list">
                     <div class="empty-state">
                         <p>No notes yet. Add your first URL note!</p>

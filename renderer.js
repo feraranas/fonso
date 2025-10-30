@@ -5,6 +5,10 @@ console.log('Renderer process loaded!');
 console.log('Platform:', window.electronAPI.platform);
 console.log('Electron version:', window.electronAPI.version);
 
+// State management for notes
+let allNotes = []; // Store all loaded notes
+let currentSearchKeyword = ''; // Track current search keyword
+
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
@@ -16,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function initializeApp() {
     setupForm();
     setupDateField();
+    setupSearch();
     setupNotesListener();
     await loadAndDisplayNotes();
     console.log('App initialized successfully!');
@@ -109,6 +114,7 @@ async function handleFormSubmit(event) {
 function setupNotesListener() {
     window.electronAPI.onNotesUpdated(() => {
         console.log('Notes updated, reloading...');
+        // Reload notes and maintain current search state
         loadAndDisplayNotes();
     });
 }
@@ -119,12 +125,111 @@ function setupNotesListener() {
 async function loadAndDisplayNotes() {
     try {
         const notes = await window.electronAPI.loadNotes();
-        displayNotes(notes);
-        updateNotesCount(notes.length);
+        // Store all notes in state
+        allNotes = notes;
+        // Apply current search filter if any
+        applySearchFilter();
     } catch (error) {
         console.error('Error loading notes:', error);
         showMessage('Error loading notes', 'error');
     }
+}
+
+/**
+ * Set up search functionality
+ */
+function setupSearch() {
+    const searchInput = document.getElementById('search-input');
+    const clearButton = document.getElementById('clear-search-btn');
+    
+    if (searchInput) {
+        // Real-time search as user types
+        searchInput.addEventListener('input', handleSearchInput);
+        
+        // Handle Enter key to focus on results
+        searchInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                clearSearch();
+            }
+        });
+    }
+    
+    if (clearButton) {
+        clearButton.addEventListener('click', clearSearch);
+    }
+}
+
+/**
+ * Handle search input changes
+ * @param {Event} event - The input event
+ */
+function handleSearchInput(event) {
+    const keyword = event.target.value.trim();
+    currentSearchKeyword = keyword;
+    
+    // Show/hide clear button based on input
+    const clearButton = document.getElementById('clear-search-btn');
+    if (clearButton) {
+        clearButton.style.display = keyword ? 'flex' : 'none';
+    }
+    
+    // Apply search filter
+    applySearchFilter();
+}
+
+/**
+ * Filter notes by keyword
+ * @param {string} keyword - Search keyword
+ * @returns {Array} Filtered notes
+ */
+function filterNotes(keyword) {
+    if (!keyword) {
+        return allNotes;
+    }
+    
+    const lowerKeyword = keyword.toLowerCase();
+    
+    return allNotes.filter(note => {
+        // Search in title
+        const titleMatch = note.title && note.title.toLowerCase().includes(lowerKeyword);
+        
+        // Search in URL
+        const urlMatch = note.url && note.url.toLowerCase().includes(lowerKeyword);
+        
+        // Search in summary
+        const summaryMatch = note.summary && note.summary.toLowerCase().includes(lowerKeyword);
+        
+        return titleMatch || urlMatch || summaryMatch;
+    });
+}
+
+/**
+ * Apply search filter and update display
+ */
+function applySearchFilter() {
+    const filteredNotes = filterNotes(currentSearchKeyword);
+    displayNotes(filteredNotes);
+    updateNotesCount(filteredNotes.length, allNotes.length);
+}
+
+/**
+ * Clear search and show all notes
+ */
+function clearSearch() {
+    const searchInput = document.getElementById('search-input');
+    const clearButton = document.getElementById('clear-search-btn');
+    
+    if (searchInput) {
+        searchInput.value = '';
+        currentSearchKeyword = '';
+    }
+    
+    if (clearButton) {
+        clearButton.style.display = 'none';
+    }
+    
+    // Display all notes
+    applySearchFilter();
 }
 
 /**
@@ -139,13 +244,30 @@ function displayNotes(notes) {
         return;
     }
     
+    // Handle empty states
     if (notes.length === 0) {
-        notesList.innerHTML = '<div class="empty-state"><p>No notes yet. Add your first URL note!</p></div>';
+        if (currentSearchKeyword) {
+            // Show "no results" message when searching
+            notesList.innerHTML = `
+                <div class="empty-state">
+                    <p>No notes found matching "<strong>${escapeHtml(currentSearchKeyword)}</strong>"</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">Try a different keyword or <button id="clear-search-empty-btn" style="background: none; border: none; color: #667eea; cursor: pointer; text-decoration: underline;">clear the search</button></p>
+                </div>
+            `;
+            // Add event listener to the clear button in empty state
+            const clearEmptyBtn = document.getElementById('clear-search-empty-btn');
+            if (clearEmptyBtn) {
+                clearEmptyBtn.addEventListener('click', clearSearch);
+            }
+        } else {
+            // Show "no notes" message when there are no notes at all
+            notesList.innerHTML = '<div class="empty-state"><p>No notes yet. Add your first URL note!</p></div>';
+        }
         return;
     }
     
     // Sort notes by creation date (newest first)
-    const sortedNotes = notes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const sortedNotes = [...notes].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     
     // Generate HTML for each note
     const notesHTML = sortedNotes.map(note => createNoteCard(note)).join('');
@@ -224,12 +346,19 @@ async function deleteNote(noteId) {
 
 /**
  * Update the notes count display
- * @param {number} count - Number of notes
+ * @param {number} filteredCount - Number of filtered notes
+ * @param {number} totalCount - Total number of notes
  */
-function updateNotesCount(count) {
+function updateNotesCount(filteredCount, totalCount) {
     const countElement = document.getElementById('notes-count');
     if (countElement) {
-        countElement.textContent = count;
+        if (currentSearchKeyword && filteredCount !== totalCount) {
+            // Show "X of Y notes" when filtered
+            countElement.textContent = `${filteredCount} of ${totalCount} notes`;
+        } else {
+            // Show just the count when not searching or all notes match
+            countElement.textContent = `${filteredCount} note${filteredCount !== 1 ? 's' : ''}`;
+        }
     }
 }
 
