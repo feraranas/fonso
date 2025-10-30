@@ -19,10 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
  * Initialize the application
  */
 async function initializeApp() {
+    initializeTheme();
     setupForm();
     setupDateField();
     setupSearch();
     setupExportImport();
+    setupThemeToggle();
     setupNotesListener();
     await loadAndDisplayNotes();
     console.log('App initialized successfully!');
@@ -134,6 +136,54 @@ async function handleFormSubmit(event) {
         // Restore button state
         submitButton.textContent = originalText;
         submitButton.disabled = false;
+    }
+}
+
+/**
+ * Initialize theme from localStorage or default to light
+ */
+function initializeTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+}
+
+/**
+ * Set theme and update UI
+ * @param {string} theme - 'light' or 'dark'
+ */
+function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    updateThemeIcon(theme);
+}
+
+/**
+ * Toggle between light and dark theme
+ */
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+}
+
+/**
+ * Update theme icon based on current theme
+ * @param {string} theme - Current theme
+ */
+function updateThemeIcon(theme) {
+    const themeIcon = document.querySelector('.theme-icon');
+    if (themeIcon) {
+        themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+    }
+}
+
+/**
+ * Set up theme toggle button
+ */
+function setupThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
     }
 }
 
@@ -637,14 +687,17 @@ function showMessage(message, type = 'info') {
             font-weight: 600;
             z-index: 1000;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 12px var(--shadow-dark);
         `;
         document.body.appendChild(messageElement);
     }
     
     // Set message content and style
     messageElement.textContent = message;
-    messageElement.style.backgroundColor = type === 'success' ? '#28a745' : 
-                                        type === 'error' ? '#dc3545' : '#17a2b8';
+    const rootStyles = getComputedStyle(document.documentElement);
+    messageElement.style.backgroundColor = type === 'success' ? rootStyles.getPropertyValue('--success-color').trim() : 
+                                        type === 'error' ? rootStyles.getPropertyValue('--error-color').trim() : 
+                                        rootStyles.getPropertyValue('--info-color').trim();
     
     // Show message
     messageElement.style.opacity = '1';
