@@ -12,7 +12,7 @@
     <div class="app-container">
         <header class="app-header">
             <h1>📝 Fonso - URL Note Taker</h1>
-            <p>Save and organize your interesting URLs</p>
+            <p>Save and organize URLs</p>
         </header>
         
         <main class="app-main">
@@ -87,8 +87,18 @@
             <div class="notes-section">
                 <div class="notes-header">
                     <h2>Your Saved Notes</h2>
-                    <div class="notes-count">
-                        <span id="notes-count">0</span> notes
+                    <div class="header-actions">
+                        <div class="notes-count">
+                            <span id="notes-count">0</span> notes
+                        </div>
+                        <div class="export-import-buttons">
+                            <button id="export-btn" class="btn btn-export" title="Export notes to JSON file">
+                                📤 Export
+                            </button>
+                            <button id="import-btn" class="btn btn-import" title="Import notes from JSON file">
+                                📥 Import
+                            </button>
+                        </div>
                     </div>
                 </div>
                 

@@ -16,5 +16,17 @@
     "date": "2025-10-30T05:20",
     "createdAt": "2025-10-30T05:21:20.823Z",
     "updatedAt": "2025-10-30T05:21:20.823Z"
+  },
+  {
+    "id": "mhd2vnxqf12y3n1y8ej",
+    "url": "https://github.com/anttimaki/notebook/blob/master/books/software-engineering-at-google.md",
+    "title": "How does a software engineer perform at Google?",
+    "summary": "How does a software engineer perform at Google? What are the directives? How is the work day? How is the methodology around working with other Googlers?",
+    "date": "2025-10-29T07:01",
+    "tags": [
+      "software engineer"
+    ],
+    "createdAt": "2025-10-30T07:03:26.702Z",
+    "updatedAt": "2025-10-30T07:03:26.703Z"
   }
 ]
