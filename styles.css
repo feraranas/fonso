@@ -1,3 +1,46 @@
+/* CSS Variables for Theming */
+:root {
+    /* Light theme (default) */
+    --bg-primary: #f8f9fa;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #e9ecef;
+    --text-primary: #333333;
+    --text-secondary: #495057;
+    --text-tertiary: #6c757d;
+    --text-muted: #adb5bd;
+    --border-color: #e9ecef;
+    --border-color-dark: #dee2e6;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --shadow-dark: rgba(0, 0, 0, 0.2);
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-primary-reverse: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    --accent-color: #667eea;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --info-color: #17a2b8;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #3d3d3d;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --text-tertiary: #8a8a8a;
+    --text-muted: #6a6a6a;
+    --border-color: #3d3d3d;
+    --border-color-dark: #4d4d4d;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --shadow-dark: rgba(0, 0, 0, 0.5);
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-primary-reverse: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    --accent-color: #7d8ef0;
+    --success-color: #34ce57;
+    --error-color: #ff4757;
+    --info-color: #26d0ce;
+}
+
 /* Reset and base styles */
 * {
     margin: 0;
@@ -8,8 +51,9 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
-    color: #333;
-    background-color: #f8f9fa;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* App container */
@@ -24,10 +68,44 @@ body {
     text-align: center;
     margin-bottom: 40px;
     padding: 20px 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-primary);
     color: white;
     border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px var(--shadow);
+    position: relative;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+.theme-icon {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover .theme-icon {
+    transform: rotate(20deg);
 }
 
 .app-header h1 {
@@ -52,21 +130,23 @@ body {
 /* Form and notes sections */
 .form-section,
 .notes-section {
-    background: white;
+    background: var(--bg-secondary);
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 10px var(--shadow);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .form-section h2,
 .notes-section h2 {
-    color: #495057;
+    color: var(--text-secondary);
     margin-bottom: 20px;
     font-size: 1.5rem;
     font-weight: 600;
-    border-bottom: 2px solid #e9ecef;
+    border-bottom: 2px solid var(--border-color);
     padding-bottom: 10px;
+    transition: color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Form styles */
@@ -84,24 +164,27 @@ body {
 
 .form-group label {
     font-weight: 600;
-    color: #495057;
+    color: var(--text-secondary);
     font-size: 0.9rem;
+    transition: color 0.3s ease;
 }
 
 .form-input,
 .form-textarea {
     padding: 12px 16px;
-    border: 2px solid #e9ecef;
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     font-size: 1rem;
     transition: all 0.2s ease;
     font-family: inherit;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
 }
 
 .form-input:focus,
 .form-textarea:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: var(--accent-color);
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -114,8 +197,9 @@ body {
     display: block;
     margin-top: 6px;
     font-size: 0.85rem;
-    color: #6c757d;
+    color: var(--text-tertiary);
     font-style: italic;
+    transition: color 0.3s ease;
 }
 
 /* Button styles */
@@ -131,13 +215,13 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-primary);
     color: white;
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 12px var(--shadow-dark);
 }
 
 .btn-primary:active {
@@ -162,12 +246,13 @@ body {
 }
 
 .notes-count {
-    background: #e9ecef;
-    color: #6c757d;
+    background: var(--bg-tertiary);
+    color: var(--text-tertiary);
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 600;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .export-import-buttons {
@@ -180,25 +265,25 @@ body {
     padding: 8px 16px;
     font-size: 0.9rem;
     border-radius: 6px;
-    border: 2px solid #e9ecef;
-    background: white;
-    color: #495057;
+    border: 2px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .btn-export:hover {
-    background: #28a745;
+    background: var(--success-color);
     color: white;
-    border-color: #28a745;
+    border-color: var(--success-color);
     transform: translateY(-1px);
 }
 
 .btn-import:hover {
-    background: #17a2b8;
+    background: var(--info-color);
     color: white;
-    border-color: #17a2b8;
+    border-color: var(--info-color);
     transform: translateY(-1px);
 }
 
@@ -222,36 +307,38 @@ body {
     position: absolute;
     left: 16px;
     font-size: 1.1rem;
-    color: #6c757d;
+    color: var(--text-tertiary);
     pointer-events: none;
     z-index: 1;
+    transition: color 0.3s ease;
 }
 
 .search-input {
     width: 100%;
     padding: 12px 16px 12px 45px;
-    border: 2px solid #e9ecef;
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     font-size: 1rem;
     transition: all 0.2s ease;
     font-family: inherit;
-    background: white;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
 }
 
 .search-input:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: var(--accent-color);
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .search-input::placeholder {
-    color: #adb5bd;
+    color: var(--text-muted);
 }
 
 .btn-clear-search {
     position: absolute;
     right: 12px;
-    background: #6c757d;
+    background: var(--text-tertiary);
     color: white;
     border: none;
     border-radius: 50%;
@@ -267,7 +354,7 @@ body {
 }
 
 .btn-clear-search:hover {
-    background: #495057;
+    background: var(--text-secondary);
     transform: scale(1.1);
 }
 
@@ -280,17 +367,18 @@ body {
 .empty-state {
     text-align: center;
     padding: 40px 20px;
-    color: #6c757d;
+    color: var(--text-tertiary);
     font-style: italic;
-    background: #f8f9fa;
+    background: var(--bg-primary);
     border-radius: 8px;
-    border: 2px dashed #dee2e6;
+    border: 2px dashed var(--border-color-dark);
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 /* Note card styles */
 .note-card {
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 20px;
     transition: all 0.2s ease;
@@ -298,7 +386,7 @@ body {
 }
 
 .note-card:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px var(--shadow);
     transform: translateY(-1px);
 }
 
@@ -313,19 +401,20 @@ body {
     margin: 0;
     font-size: 1.2rem;
     font-weight: 600;
-    color: #495057;
+    color: var(--text-secondary);
     flex: 1;
     margin-right: 12px;
+    transition: color 0.3s ease;
 }
 
 .note-title a {
-    color: #495057;
+    color: var(--text-secondary);
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
 .note-title a:hover {
-    color: #667eea;
+    color: var(--accent-color);
 }
 
 .note-url {
@@ -333,7 +422,7 @@ body {
 }
 
 .note-url a {
-    color: #6c757d;
+    color: var(--text-tertiary);
     text-decoration: none;
     font-size: 0.9rem;
     word-break: break-all;
@@ -341,14 +430,15 @@ body {
 }
 
 .note-url a:hover {
-    color: #667eea;
+    color: var(--accent-color);
 }
 
 .note-summary {
-    color: #6c757d;
+    color: var(--text-tertiary);
     line-height: 1.5;
     margin-bottom: 12px;
     font-size: 0.95rem;
+    transition: color 0.3s ease;
 }
 
 .note-meta {
@@ -356,7 +446,8 @@ body {
     justify-content: space-between;
     align-items: center;
     font-size: 0.85rem;
-    color: #6c757d;
+    color: var(--text-tertiary);
+    transition: color 0.3s ease;
 }
 
 .note-date {
@@ -375,7 +466,7 @@ body {
 }
 
 .btn-delete:hover {
-    background: #dc3545;
+    background: var(--error-color);
     color: white;
     opacity: 1;
     transform: scale(1.1);
@@ -418,22 +509,23 @@ body {
     align-items: center;
     gap: 8px;
     padding: 4px 12px;
-    background: #e9ecef;
+    background: var(--bg-tertiary);
     border-radius: 16px;
     font-size: 0.85rem;
-    color: #495057;
+    color: var(--text-secondary);
     margin-left: auto;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .tag-filter-indicator .tag-name {
     font-weight: 600;
-    color: #667eea;
+    color: var(--accent-color);
 }
 
 .tag-filter-indicator .btn-clear-tag-filter {
     background: none;
     border: none;
-    color: #6c757d;
+    color: var(--text-tertiary);
     cursor: pointer;
     font-size: 1rem;
     padding: 0;
@@ -442,7 +534,7 @@ body {
 }
 
 .tag-filter-indicator .btn-clear-tag-filter:hover {
-    color: #dc3545;
+    color: var(--error-color);
 }
 
 /* Responsive design */
