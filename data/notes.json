@@ -1,32 +1,238 @@
 [
   {
-    "id": "mhcz6qn6w77neec7tbd",
-    "url": "https://every.to/source-code/inside-the-ai-workflows-of-every-s-six-engineers",
-    "title": "Inside the AI Workflows of Every’s Six Engineers",
-    "summary": "This article explain how 6 Engineers from the company Every are using AI to build stuff with Claude Code, Cursor, Amp, Codex, and some hack tips.",
-    "date": "2025-10-29T05:18",
-    "createdAt": "2025-10-30T05:20:04.962Z",
-    "updatedAt": "2025-10-30T05:20:04.962Z"
-  },
-  {
-    "id": "mhcz8d6fxu9i3joc5b",
-    "url": "https://mitchellh.com/writing",
-    "title": "Mitchel Hashimotto Personal Blog page",
-    "summary": "Mitchel Hashimotto is a true code craftsman. He build Hashi Corp company, responsible of Terraform, one of the pillars of DevOps.",
-    "date": "2025-10-30T05:20",
-    "createdAt": "2025-10-30T05:21:20.823Z",
-    "updatedAt": "2025-10-30T05:21:20.823Z"
-  },
-  {
     "id": "mhd2vnxqf12y3n1y8ej",
     "url": "https://github.com/anttimaki/notebook/blob/master/books/software-engineering-at-google.md",
     "title": "How does a software engineer perform at Google?",
-    "summary": "How does a software engineer perform at Google? What are the directives? How is the work day? How is the methodology around working with other Googlers?",
-    "date": "2025-10-29T07:01",
+    "summary": "A detailed note by Antti Mäki summarizing the principles and culture behind Google's software engineering practices, including expectations of engineers, collaboration models, and daily methodologies within the company.",
+    "date": "2025-10-30T00:00",
     "tags": [
-      "software engineer"
+      "software engineering",
+      "culture"
     ],
-    "createdAt": "2025-10-30T07:03:26.702Z",
-    "updatedAt": "2025-10-30T07:03:26.703Z"
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd4tavily001",
+    "url": "https://www.tavily.com/",
+    "title": "Tavily — AI-Powered Search API for Retrieval-Augmented Generation",
+    "summary": "Tavily provides a search API tailored for AI agents and retrieval-augmented generation (RAG). It enables accurate, verifiable web search integration for LLMs, supporting dynamic content retrieval and relevance scoring for improved factual grounding.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "ai tools",
+      "rag",
+      "search"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd4vllm002",
+    "url": "https://docs.vllm.ai/en/latest/getting_started/quickstart.html#offline-batched-inference",
+    "title": "vLLM Quickstart — Offline Batched Inference",
+    "summary": "The vLLM documentation explains how to perform efficient offline batched inference with large language models. It covers setup instructions, performance optimization, and usage patterns for large-scale inference tasks in production pipelines.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "ai tools",
+      "inference",
+      "vllm"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd5simpleqa003",
+    "url": "https://arxiv.org/abs/2411.04368",
+    "title": "SimpleQA Benchmark — Evaluating Fact-Seeking Accuracy in LLMs",
+    "summary": "OpenAI’s SimpleQA benchmark measures the factual accuracy of language models in answering short, fact-seeking questions. It tests a model’s ability to retrieve and synthesize information across curated factual datasets using standardized evaluation criteria.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "benchmarks",
+      "llm evaluation",
+      "openai"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd5quotient004",
+    "url": "https://www.quotientai.co/",
+    "title": "QuotientAI — Document Relevance Benchmark and Analysis",
+    "summary": "QuotientAI provides a dynamic benchmark for assessing document relevance in real-time search and retrieval systems. It introduces a dynamic dataset generator and an evaluation framework to measure how well systems return relevant content to queries.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "benchmarks",
+      "search relevance",
+      "retrieval"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd5gaia005",
+    "url": "https://arxiv.org/abs/2311.12983",
+    "title": "GAIA Benchmark — Evaluating AI Agents as General-Purpose Assistants",
+    "summary": "The GAIA benchmark tests AI agents on real-world tasks that require web browsing, coding, reasoning, and multimodal input handling. Developed by Carnegie Mellon University, it provides a holistic evaluation of AI assistant capabilities across domains.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "benchmarks",
+      "ai agents",
+      "evaluation"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd5leetcode006",
+    "url": "https://arxiv.org/html/2505.03906v2",
+    "title": "LeetCode 75 Benchmark — MARCO Multi-Agent Code Optimization Study",
+    "summary": "A Virginia Tech study on MARCO (Multi-Agent Reactive Code Optimizer) benchmarking LLM-generated code performance using the LeetCode 75 dataset. The study measures runtime efficiency and demonstrates how web search integration enhances code correctness.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "benchmarks",
+      "code generation",
+      "multi-agent"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd6miami007",
+    "url": "https://youtube.com/shorts/VA7a_4M1eZI?si=sE6ZMIQcBBW9ckRb",
+    "title": "Miami Startup Idea Clip — Short Video Inspiration",
+    "summary": "A short YouTube clip featuring insights and creative prompts about startup ideation in Miami, highlighting local entrepreneurial energy and innovative thinking.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "ideas",
+      "miami",
+      "startups"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd7psl008",
+    "url": "https://www.psl.com/feed-posts/how-we-used-ai-to-generate-10-000-vetted-startup-ideas-and-what-we-learned",
+    "title": "How PSL Used AI to Generate 10,000 Startup Ideas",
+    "summary": "Pioneer Square Labs (PSL) describes how they leveraged AI to create and vet 10,000 startup ideas. The post outlines their methodology, filtering approach, and lessons learned about human-AI collaboration in early-stage innovation.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "simulations",
+      "ai ideation",
+      "startups"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd7lev009",
+    "url": "https://trylev.co/find-ideas",
+    "title": "Lev — AI-Powered Startup Idea Finder",
+    "summary": "Lev provides tools to discover and validate startup ideas using AI-driven market insights. It helps users explore new business opportunities through structured ideation workflows and real-time data.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "simulations",
+      "ai ideation"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd7paper010",
+    "url": "https://paperthinpersonas.com/",
+    "title": "Paper Thin Personas — Creative Persona Simulation Platform",
+    "summary": "Paper Thin Personas offers creative simulations and persona-driven ideation tools for brainstorming and marketing research. It helps users explore perspectives through interactive, character-based experiences.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "simulations",
+      "personas",
+      "creativity"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd7roulette011",
+    "url": "https://paperthinpersonas.com/2020/04/29/idea-roulette-art-fun-while-at-home/",
+    "title": "Idea Roulette — Art & Fun While at Home",
+    "summary": "An article about 'Idea Roulette', a playful concept for generating creative ideas during downtime. It combines art, randomness, and structured fun to inspire innovation and creativity.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "simulations",
+      "creativity",
+      "idea generation"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd7hn012",
+    "url": "https://news.ycombinator.com/item?id=2079166",
+    "title": "Hacker News Thread — Idea Roulette Discussion",
+    "summary": "A Hacker News community thread discussing the 'Idea Roulette' concept and other creative ideation tools. It includes user perspectives and open-source project references on gamifying innovation.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "simulations",
+      "discussion",
+      "innovation"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd7rouletteapp013",
+    "url": "https://idea-roulette.vercel.app/",
+    "title": "Idea Roulette App — Randomized Idea Generator",
+    "summary": "A live web app that implements the 'Idea Roulette' concept for generating randomized creative prompts. It lets users spin for new business, art, or product ideas in an interactive format.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "simulations",
+      "apps",
+      "idea generation"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd7github014",
+    "url": "https://github.com/PioneerSquareLabs/idea-roulette",
+    "title": "Idea Roulette — GitHub Repository",
+    "summary": "The open-source GitHub repository for 'Idea Roulette', a creative ideation tool developed by Pioneer Square Labs. Includes implementation details, contributions, and community forks.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "simulations",
+      "open source",
+      "innovation"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd7linkedin015",
+    "url": "https://www.linkedin.com/company/descifra/about/",
+    "title": "Descifra — Location Intelligence Company Overview",
+    "summary": "Descifra is a geospatial analytics company that provides location intelligence solutions for businesses. Their platform helps identify optimal retail and real estate opportunities using data-driven spatial insights.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "simulations",
+      "geospatial",
+      "startups"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd7webflow016",
+    "url": "https://descifra.webflow.io/",
+    "title": "Descifra — Webflow Presentation Site",
+    "summary": "Descifra’s Webflow microsite showcasing its location intelligence tools and analytics platform, emphasizing data visualization and geographic decision-making for retail and real estate planning.",
+    "date": "2025-10-30T00:00",
+    "tags": [
+      "simulations",
+      "geospatial",
+      "data visualization"
+    ],
+    "createdAt": "2025-10-30T00:00:00.000Z",
+    "updatedAt": "2025-10-30T00:00:00.000Z"
   }
 ]
