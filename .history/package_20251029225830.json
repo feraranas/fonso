@@ -1,0 +1,22 @@
+{
+  "name": "fonso-url-note-taker",
+  "version": "1.0.0",
+  "description": "A simple Electron app for saving and managing interesting URLs with metadata",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Fernan Kiwi",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0"
+  },
+  "keywords": [
+    "electron",
+    "notes",
+    "urls",
+    "desktop-app"
+  ]
+}
