@@ -115,14 +115,14 @@ body {
 }
 
 .app-header p {
-    font-size: 1.1rem;
+    font-size: 0.75rem;
     opacity: 0.9;
 }
 
 /* Main content */
 .app-main {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 30px;
     min-height: 500px;
 }
@@ -540,7 +540,6 @@ body {
 /* Responsive design */
 @media (max-width: 768px) {
     .app-main {
-        grid-template-columns: 1fr;
         gap: 20px;
     }
     
