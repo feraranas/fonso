@@ -8,6 +8,7 @@ console.log('Electron version:', window.electronAPI.version);
 // State management for notes
 let allNotes = []; // Store all loaded notes
 let currentSearchKeyword = ''; // Track current search keyword
+let currentTagFilter = ''; // Track currently selected tag filter
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
@@ -55,6 +56,31 @@ function setupDateField() {
 }
 
 /**
+ * Parse comma-separated tags string into array
+ * @param {string} tagString - Comma-separated tags string
+ * @returns {Array<string>} Array of normalized tags
+ */
+function parseTags(tagString) {
+    if (!tagString || !tagString.trim()) {
+        return [];
+    }
+    
+    return tagString
+        .split(',')
+        .map(tag => normalizeTag(tag))
+        .filter(tag => tag.length > 0); // Remove empty tags
+}
+
+/**
+ * Normalize a tag (trim whitespace, convert to lowercase)
+ * @param {string} tag - Tag to normalize
+ * @returns {string} Normalized tag
+ */
+function normalizeTag(tag) {
+    return tag.trim().toLowerCase();
+}
+
+/**
  * Handle form submission
  * @param {Event} event - The form submit event
  */
@@ -65,11 +91,13 @@ async function handleFormSubmit(event) {
     
     // Get form data
     const formData = new FormData(event.target);
+    const tagsString = formData.get('tags') || '';
     const noteData = {
         url: formData.get('url'),
         title: formData.get('title'),
         summary: formData.get('summary'),
-        date: formData.get('date')
+        date: formData.get('date'),
+        tags: parseTags(tagsString) // Parse tags from comma-separated string
     };
     
     console.log('Note data:', noteData);
@@ -178,38 +206,73 @@ function handleSearchInput(event) {
 }
 
 /**
- * Filter notes by keyword
+ * Filter notes by keyword and tag
  * @param {string} keyword - Search keyword
+ * @param {string} tagFilter - Tag to filter by
  * @returns {Array} Filtered notes
  */
-function filterNotes(keyword) {
-    if (!keyword) {
-        return allNotes;
+function filterNotes(keyword, tagFilter) {
+    let filtered = allNotes;
+    
+    // Apply tag filter first
+    if (tagFilter) {
+        const normalizedTag = normalizeTag(tagFilter);
+        filtered = filtered.filter(note => {
+            // Ensure backward compatibility - notes without tags array default to empty array
+            const tags = note.tags || [];
+            return tags.some(tag => normalizeTag(tag) === normalizedTag);
+        });
     }
     
-    const lowerKeyword = keyword.toLowerCase();
+    // Apply keyword search
+    if (keyword) {
+        const lowerKeyword = keyword.toLowerCase();
+        filtered = filtered.filter(note => {
+            // Search in title
+            const titleMatch = note.title && note.title.toLowerCase().includes(lowerKeyword);
+            
+            // Search in URL
+            const urlMatch = note.url && note.url.toLowerCase().includes(lowerKeyword);
+            
+            // Search in summary
+            const summaryMatch = note.summary && note.summary.toLowerCase().includes(lowerKeyword);
+            
+            // Search in tags
+            const tags = note.tags || [];
+            const tagsMatch = tags.some(tag => tag.toLowerCase().includes(lowerKeyword));
+            
+            return titleMatch || urlMatch || summaryMatch || tagsMatch;
+        });
+    }
     
-    return allNotes.filter(note => {
-        // Search in title
-        const titleMatch = note.title && note.title.toLowerCase().includes(lowerKeyword);
-        
-        // Search in URL
-        const urlMatch = note.url && note.url.toLowerCase().includes(lowerKeyword);
-        
-        // Search in summary
-        const summaryMatch = note.summary && note.summary.toLowerCase().includes(lowerKeyword);
-        
-        return titleMatch || urlMatch || summaryMatch;
-    });
+    return filtered;
 }
 
 /**
- * Apply search filter and update display
+ * Apply search filter and tag filter, then update display
  */
 function applySearchFilter() {
-    const filteredNotes = filterNotes(currentSearchKeyword);
+    const filteredNotes = filterNotes(currentSearchKeyword, currentTagFilter);
     displayNotes(filteredNotes);
     updateNotesCount(filteredNotes.length, allNotes.length);
+    updateTagFilterIndicator();
+}
+
+/**
+ * Filter notes by tag
+ * @param {string} tag - Tag to filter by
+ */
+function filterByTag(tag) {
+    currentTagFilter = tag;
+    applySearchFilter();
+}
+
+/**
+ * Clear tag filter
+ */
+function clearTagFilter() {
+    currentTagFilter = '';
+    applySearchFilter();
 }
 
 /**
@@ -228,7 +291,7 @@ function clearSearch() {
         clearButton.style.display = 'none';
     }
     
-    // Display all notes
+    // Display all notes (tag filter remains active)
     applySearchFilter();
 }
 
@@ -273,8 +336,9 @@ function displayNotes(notes) {
     const notesHTML = sortedNotes.map(note => createNoteCard(note)).join('');
     notesList.innerHTML = notesHTML;
     
-    // Add event listeners to delete buttons
+    // Add event listeners to delete buttons and tag badges
     addDeleteListeners();
+    addTagListeners();
 }
 
 /**
@@ -285,6 +349,12 @@ function displayNotes(notes) {
 function createNoteCard(note) {
     const createdDate = new Date(note.createdAt).toLocaleDateString();
     const createdTime = new Date(note.createdAt).toLocaleTimeString();
+    const tags = note.tags || [];
+    
+    // Generate tags HTML
+    const tagsHTML = tags.length > 0 
+        ? `<div class="note-tags">${tags.map(tag => createTagBadge(tag, true)).join('')}</div>`
+        : '';
     
     return `
         <div class="note-card" data-note-id="${note.id}">
@@ -303,12 +373,30 @@ function createNoteCard(note) {
                     ${escapeHtml(note.url)}
                 </a>
             </div>
+            ${tagsHTML}
             ${note.summary ? `<div class="note-summary">${escapeHtml(note.summary)}</div>` : ''}
             <div class="note-meta">
                 <span class="note-date">Saved on ${createdDate} at ${createdTime}</span>
             </div>
         </div>
     `;
+}
+
+/**
+ * Create HTML for a tag badge
+ * @param {string} tag - Tag name
+ * @param {boolean} isClickable - Whether the tag should be clickable
+ * @returns {string} HTML string for tag badge
+ */
+function createTagBadge(tag, isClickable = true) {
+    const isActive = currentTagFilter && normalizeTag(currentTagFilter) === normalizeTag(tag);
+    const activeClass = isActive ? 'active' : '';
+    
+    if (isClickable) {
+        return `<button class="tag-badge ${activeClass}" data-tag="${escapeHtml(tag)}" title="Filter by ${escapeHtml(tag)}">${escapeHtml(tag)}</button>`;
+    } else {
+        return `<span class="tag-badge">${escapeHtml(tag)}</span>`;
+    }
 }
 
 /**
@@ -324,6 +412,63 @@ function addDeleteListeners() {
             }
         });
     });
+}
+
+/**
+ * Add event listeners to tag badges
+ */
+function addTagListeners() {
+    const tagBadges = document.querySelectorAll('.tag-badge[data-tag]');
+    tagBadges.forEach(badge => {
+        badge.addEventListener('click', (event) => {
+            const tag = event.target.getAttribute('data-tag');
+            if (tag) {
+                // Toggle tag filter: if same tag clicked, clear filter; otherwise set new filter
+                if (currentTagFilter && normalizeTag(currentTagFilter) === normalizeTag(tag)) {
+                    clearTagFilter();
+                } else {
+                    filterByTag(tag);
+                }
+            }
+        });
+    });
+}
+
+/**
+ * Update tag filter indicator in the UI
+ */
+function updateTagFilterIndicator() {
+    const notesHeader = document.querySelector('.notes-header');
+    if (!notesHeader) return;
+    
+    // Remove existing indicator
+    const existingIndicator = document.getElementById('tag-filter-indicator');
+    if (existingIndicator) {
+        existingIndicator.remove();
+    }
+    
+    // Add indicator if tag filter is active
+    if (currentTagFilter) {
+        const indicator = document.createElement('div');
+        indicator.id = 'tag-filter-indicator';
+        indicator.className = 'tag-filter-indicator';
+        indicator.innerHTML = `
+            <span>Filtered by:</span>
+            <span class="tag-name">${escapeHtml(currentTagFilter)}</span>
+            <button class="btn-clear-tag-filter" title="Clear tag filter">✕</button>
+        `;
+        
+        // Add click handler to clear button
+        const clearBtn = indicator.querySelector('.btn-clear-tag-filter');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', clearTagFilter);
+        }
+        
+        // Append to notes header
+        if (notesHeader) {
+            notesHeader.appendChild(indicator);
+        }
+    }
 }
 
 /**
