@@ -234,5 +234,17 @@
     ],
     "createdAt": "2025-10-30T00:00:00.000Z",
     "updatedAt": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "mhd4ptkunrhkuxgup2",
+    "url": "https://modelcontextprotocol.info/docs/examples/",
+    "title": "MCP server",
+    "summary": "MCP Server",
+    "date": "2025-10-30T01:54",
+    "tags": [
+      "mcp"
+    ],
+    "createdAt": "2025-10-30T07:54:53.310Z",
+    "updatedAt": "2025-10-30T07:54:53.310Z"
   }
 ]

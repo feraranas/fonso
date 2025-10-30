@@ -2,8 +2,14 @@
 // This runs in the renderer process and has access to the DOM
 
 console.log('Renderer process loaded!');
-console.log('Platform:', window.electronAPI.platform);
-console.log('Electron version:', window.electronAPI.version);
+console.log('Checking window.electronAPI:', window.electronAPI);
+if (window.electronAPI) {
+    console.log('Platform:', window.electronAPI.platform);
+    console.log('Electron version:', window.electronAPI.version);
+    console.log('loadNotes method available:', typeof window.electronAPI.loadNotes);
+} else {
+    console.error('ERROR: window.electronAPI is not defined!');
+}
 
 // State management for notes
 let allNotes = []; // Store all loaded notes
@@ -158,17 +164,22 @@ function initializeTheme() {
  * @param {string} theme - 'light' or 'dark'
  */
 function setTheme(theme) {
+    console.log('Setting theme to:', theme);
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
     updateThemeIcon(theme);
+    console.log('Theme set successfully. data-theme attribute:', document.documentElement.getAttribute('data-theme'));
 }
 
 /**
  * Toggle between light and dark theme
  */
 function toggleTheme() {
+    console.log('Theme toggle clicked');
     const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    console.log('Current theme:', currentTheme);
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    console.log('Switching to theme:', newTheme);
     setTheme(newTheme);
 }
 
@@ -190,6 +201,9 @@ function setupThemeToggle() {
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
         themeToggle.addEventListener('click', toggleTheme);
+        console.log('Theme toggle button event listener attached');
+    } else {
+        console.error('Theme toggle button not found!');
     }
 }
 
@@ -316,12 +330,17 @@ function setupNotesListener() {
  * Load and display all notes
  */
 async function loadAndDisplayNotes() {
+    console.log('loadAndDisplayNotes: Starting to load notes...');
     try {
         const notes = await window.electronAPI.loadNotes();
+        console.log('loadAndDisplayNotes: Notes loaded from API:', notes);
+        console.log('loadAndDisplayNotes: Number of notes:', notes ? notes.length : 0);
         // Store all notes in state
         allNotes = notes;
+        console.log('loadAndDisplayNotes: allNotes updated, length:', allNotes.length);
         // Apply current search filter if any
         applySearchFilter();
+        console.log('loadAndDisplayNotes: applySearchFilter called');
     } catch (error) {
         console.error('Error loading notes:', error);
         showMessage('Error loading notes', 'error');
@@ -417,7 +436,10 @@ function filterNotes(keyword, tagFilter) {
  * Apply search filter and tag filter, then update display
  */
 function applySearchFilter() {
+    console.log('applySearchFilter: Called. currentSearchKeyword:', currentSearchKeyword, 'currentTagFilter:', currentTagFilter);
+    console.log('applySearchFilter: allNotes.length:', allNotes.length);
     const filteredNotes = filterNotes(currentSearchKeyword, currentTagFilter);
+    console.log('applySearchFilter: filteredNotes.length:', filteredNotes.length);
     displayNotes(filteredNotes);
     updateNotesCount(filteredNotes.length, allNotes.length);
     updateTagFilterIndicator();
@@ -465,12 +487,14 @@ function clearSearch() {
  * @param {Array} notes - Array of note objects
  */
 function displayNotes(notes) {
+    console.log('displayNotes: Called with', notes ? notes.length : 0, 'notes');
     const notesList = document.getElementById('notes-list');
     
     if (!notesList) {
-        console.error('Notes list element not found');
+        console.error('displayNotes: Notes list element not found!');
         return;
     }
+    console.log('displayNotes: notesList element found');
     
     // Handle empty states
     if (notes.length === 0) {
@@ -495,15 +519,21 @@ function displayNotes(notes) {
     }
     
     // Sort notes by creation date (newest first)
+    console.log('displayNotes: Sorting notes...');
     const sortedNotes = [...notes].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    console.log('displayNotes: Sorted', sortedNotes.length, 'notes');
     
     // Generate HTML for each note
+    console.log('displayNotes: Generating HTML...');
     const notesHTML = sortedNotes.map(note => createNoteCard(note)).join('');
+    console.log('displayNotes: Generated HTML length:', notesHTML.length);
     notesList.innerHTML = notesHTML;
+    console.log('displayNotes: notesList.innerHTML set');
     
     // Add event listeners to delete buttons and tag badges
     addDeleteListeners();
     addTagListeners();
+    console.log('displayNotes: Event listeners added');
 }
 
 /**

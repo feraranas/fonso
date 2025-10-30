@@ -44,10 +44,14 @@ async function initializeDataStorage() {
  */
 async function loadNotes() {
     try {
+        console.log('loadNotes: Reading file from:', NOTES_FILE);
         const data = await fs.readFile(NOTES_FILE, 'utf8');
-        return JSON.parse(data);
+        console.log('loadNotes: File read successfully, length:', data.length);
+        const parsed = JSON.parse(data);
+        console.log('loadNotes: Parsed', Array.isArray(parsed) ? parsed.length : 'non-array', 'items');
+        return parsed;
     } catch (error) {
-        console.error('Error loading notes:', error);
+        console.error('loadNotes: Error loading notes:', error);
         return [];
     }
 }
@@ -90,13 +94,16 @@ function notifyNotesUpdated() {
 function setupIpcHandlers() {
     // Handle loading all notes
     ipcMain.handle('load-notes', async () => {
-        console.log('Loading notes...');
+        console.log('IPC load-notes: Handler called');
         const notes = await loadNotes();
+        console.log('IPC load-notes: Loaded', notes ? notes.length : 0, 'notes from file');
         // Ensure backward compatibility: add empty tags array to notes without tags
-        return notes.map(note => ({
+        const result = notes.map(note => ({
             ...note,
             tags: note.tags || []
         }));
+        console.log('IPC load-notes: Returning', result.length, 'notes to renderer');
+        return result;
     });
 
     // Handle saving a new note
