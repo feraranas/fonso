@@ -5,18 +5,28 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
+    "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && NODE_ENV=development VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
+    "build": "vite build",
     "start": "electron .",
-    "dev": "NODE_ENV=development electron .",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "mcp-client": "node build/client.js"
+    "build:ts": "tsc",
+    "mcp-client": "node build/client.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Fernan Kiwi",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0",
     "@anthropic-ai/sdk": "^0.32.0",
-    "dotenv": "^16.4.5"
+    "@coleski/datagrid": "^0.8.0",
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.1.0",
+    "concurrently": "^9.2.1",
+    "dotenv": "^16.4.5",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "vite": "^7.1.12",
+    "wait-on": "^9.0.1"
   },
   "devDependencies": {
     "electron": "^28.0.0",

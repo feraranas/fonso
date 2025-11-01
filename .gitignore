@@ -105,3 +105,6 @@ logs
 
 # System
 .history
+
+# Model Documentation
+REACT_MIGRATION.md
