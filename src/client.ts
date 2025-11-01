@@ -26,18 +26,29 @@ class MCPClient {
   }
 
   async connectToServer(serverScriptPath: string): Promise<void> {
-    const isPython = serverScriptPath.endsWith(".py");
-    const isJs = serverScriptPath.endsWith(".js");
+    let command: string;
+    let args: string[];
 
-    if (!isPython && !isJs) {
-      throw new Error("Server script must be a .py or .js file");
+    // Support for npm packages (e.g., npx @browserbasehq/mcp-server-browserbase)
+    if (serverScriptPath.startsWith("npx ")) {
+      const parts = serverScriptPath.split(" ");
+      command = "npx";
+      args = parts.slice(1);
+    } else {
+      const isPython = serverScriptPath.endsWith(".py");
+      const isJs = serverScriptPath.endsWith(".js");
+
+      if (!isPython && !isJs) {
+        throw new Error("Server script must be a .py or .js file, or an npx command");
+      }
+
+      command = isPython ? "python" : "node";
+      args = [serverScriptPath];
     }
-
-    const command = isPython ? "python" : "node";
 
     this.transport = new StdioClientTransport({
       command,
-      args: [serverScriptPath],
+      args,
     });
 
     this.client = new Client(
@@ -210,7 +221,10 @@ class MCPClient {
 // Main execution
 async function main() {
   if (process.argv.length < 3) {
-    console.log("Usage: node build/client.js <path_to_server_script>");
+    console.log("Usage: node build/client.js <path_to_server_script_or_npx_command>");
+    console.log("Examples:");
+    console.log("  node build/client.js server.js");
+    console.log("  node build/client.js 'npx @browserbasehq/mcp-server-browserbase'");
     process.exit(1);
   }
 

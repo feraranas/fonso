@@ -9,7 +9,8 @@
     "dev": "NODE_ENV=development electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "mcp-client": "node build/client.js"
+    "mcp-client": "node build/client.js",
+    "mcp-browserbase": "npm run build && node build/client.js 'npx @browserbasehq/mcp-server-browserbase'"
   },
   "author": "Fernan Kiwi",
   "license": "MIT",
