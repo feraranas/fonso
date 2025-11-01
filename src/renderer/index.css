@@ -1,0 +1,31 @@
+/* Import existing styles from root styles.css */
+@import url('../../styles.css');
+
+/* Additional React-specific styles */
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+/* Ensure the datagrid integrates well with the theme */
+.rdg {
+  --rdg-color: var(--text-primary);
+  --rdg-background-color: var(--bg-primary);
+  --rdg-header-background-color: var(--bg-secondary);
+  --rdg-row-hover-background-color: var(--hover-color);
+  --rdg-row-selected-background-color: var(--selected-color);
+  --rdg-border-color: var(--border-color);
+  --rdg-summary-border-color: var(--border-color);
+  --rdg-sign-color: var(--text-secondary);
+  --rdg-frozen-cell-box-shadow: 2px 0 5px -2px rgba(136, 136, 136, 0.3);
+}
+
+/* Dark theme adjustments for datagrid */
+[data-theme='dark'] .rdg {
+  --rdg-color: var(--text-primary);
+  --rdg-background-color: var(--bg-primary);
+  --rdg-header-background-color: var(--bg-secondary);
+  --rdg-row-hover-background-color: var(--hover-color);
+  --rdg-border-color: var(--border-color);
+}
+

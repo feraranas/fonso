@@ -1,0 +1,55 @@
+/* App-specific styles */
+/* Most styles are inherited from styles.css */
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Ensure grid container has proper height */
+.notes-list {
+  min-height: 600px;
+  background: var(--bg-primary);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Tag filter indicator positioning */
+.tag-filter-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+.tag-filter-indicator .tag-name {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.btn-clear-tag-filter {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  padding: 0 4px;
+  transition: color 0.2s;
+}
+
+.btn-clear-tag-filter:hover {
+  color: var(--error-color);
+}
+
