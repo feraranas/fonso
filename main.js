@@ -333,7 +333,13 @@ const createWindow = () => {
   });
 
   // Load the HTML file
-  mainWindow.loadFile('index.html');
+  // In development with Vite, load from dev server; otherwise load from file
+  if (process.env.VITE_DEV_SERVER_URL) {
+    mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL);
+  } else {
+    // Load production build or static file
+    mainWindow.loadFile('index.html');
+  }
 
   // Show window when ready to prevent visual flash
   mainWindow.once('ready-to-show', () => {
