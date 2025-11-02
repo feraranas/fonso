@@ -1,6 +1,6 @@
 # Fonso - URL Note Taker
 
-A modern Electron desktop app for saving and organizing URLs with metadata, built with React, TypeScript, and the @coleski/datagrid library.
+A modern Electron desktop app for saving and organizing URLs with metadata, built with React, TypeScript, and the Grid.js library.
 
 ## Features
 
@@ -25,7 +25,7 @@ A modern Electron desktop app for saving and organizing URLs with metadata, buil
 - **React 19** - UI library
 - **TypeScript** - Type safety
 - **Vite** - Fast build tool & dev server
-- **@coleski/datagrid** - High-performance data grid
+- **Grid.js** - Advanced table plugin
 - **Bun** - Fast package manager and runtime
 
 ## Prerequisites

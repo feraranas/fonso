@@ -7,25 +7,47 @@
   height: 100%;
 }
 
-/* Ensure the datagrid integrates well with the theme */
-.rdg {
-  --rdg-color: var(--text-primary);
-  --rdg-background-color: var(--bg-primary);
-  --rdg-header-background-color: var(--bg-secondary);
-  --rdg-row-hover-background-color: var(--hover-color);
-  --rdg-row-selected-background-color: var(--selected-color);
-  --rdg-border-color: var(--border-color);
-  --rdg-summary-border-color: var(--border-color);
-  --rdg-sign-color: var(--text-secondary);
-  --rdg-frozen-cell-box-shadow: 2px 0 5px -2px rgba(136, 136, 136, 0.3);
+/* Grid.js theme integration */
+.gridjs-container {
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
 }
 
-/* Dark theme adjustments for datagrid */
-[data-theme='dark'] .rdg {
-  --rdg-color: var(--text-primary);
-  --rdg-background-color: var(--bg-primary);
-  --rdg-header-background-color: var(--bg-secondary);
-  --rdg-row-hover-background-color: var(--hover-color);
-  --rdg-border-color: var(--border-color);
+.gridjs-table {
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+.gridjs-thead {
+  background-color: var(--bg-secondary);
+}
+
+.gridjs-tbody tr:hover {
+  background-color: var(--hover-color);
+}
+
+.gridjs-td,
+.gridjs-th {
+  border-color: var(--border-color);
+}
+
+/* Dark theme adjustments for Grid.js */
+[data-theme='dark'] .gridjs-container,
+[data-theme='dark'] .gridjs-table {
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+[data-theme='dark'] .gridjs-thead {
+  background-color: var(--bg-secondary);
+}
+
+[data-theme='dark'] .gridjs-tbody tr:hover {
+  background-color: var(--hover-color);
+}
+
+[data-theme='dark'] .gridjs-td,
+[data-theme='dark'] .gridjs-th {
+  border-color: var(--border-color);
 }
 

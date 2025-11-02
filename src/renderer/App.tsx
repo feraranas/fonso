@@ -7,6 +7,7 @@ import { useNotes } from './hooks/useNotes.js';
 import './App.css';
 import { NotesGrid } from './components/NotesGrid.js';
 import { AppSidebar } from './components/Sidebar.js';
+import { GridHelloWorld } from './components/GridHelloWorld.js';
 
 export interface Note {
   id: string;
@@ -72,6 +73,7 @@ function App() {
             onDelete={handleDelete}
             currentTagFilter={tagFilter}
         /> */}
+        <GridHelloWorld />
       </main>
     </div>
   );
