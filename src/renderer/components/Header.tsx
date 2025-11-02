@@ -16,8 +16,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme }) => {
       >
         <span className="theme-icon">{theme === 'dark' ? '☀️' : '🌙'}</span>
       </button>
-      <h1>📝 Fonso - URL Note Taker</h1>
-      <p>Save and organize URLs</p>
+      <h5>📝 Fonso - URL Note Taker</h5>
     </header>
   );
 };

@@ -6,6 +6,7 @@ import { useTheme } from './hooks/useTheme.js';
 import { useNotes } from './hooks/useNotes.js';
 import './App.css';
 import { NotesGrid } from './components/NotesGrid.js';
+import { AppSidebar } from './components/Sidebar.js';
 
 export interface Note {
   id: string;
@@ -33,10 +34,18 @@ function App() {
     handleImport,
     handleDelete,
   } = useNotes();
+  
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
   return (
-    <div className="app-container">
+    <div className={`app-container with-sidebar ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       <Header theme={theme} onToggleTheme={toggleTheme} />
+      <AppSidebar 
+        onExport={handleExport}
+        onImport={handleImport}
+        isCollapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+      />
       
       <main className="app-main">
         <NoteForm />
@@ -56,13 +65,13 @@ function App() {
           onDelete={handleDelete}
         />
 
-        <NotesGrid 
-            notes={}
-            searchKeyword={}
-            onTagClick={}
-            onDelete={}
-            currentTagFilter={}
-        />
+        {/* <NotesGrid 
+            notes={notes}
+            searchKeyword={searchKeyword}
+            onTagClick={handleTagFilter}
+            onDelete={handleDelete}
+            currentTagFilter={tagFilter}
+        /> */}
       </main>
     </div>
   );
