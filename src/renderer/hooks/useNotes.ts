@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Note } from '../App';
-import { showMessage } from '../utils/message';
+import { Note } from '../App.js';
+import { showMessage } from '../utils/message.js';
 
 export const useNotes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
