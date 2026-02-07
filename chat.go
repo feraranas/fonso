@@ -5,12 +5,12 @@
 package main
 
 import (
-	"bufio"  // For reading user input line by line
+	"bufio"   // For reading user input line by line
 	"context" // For managing API request contexts
-	"flag"   // For parsing command-line flags
-	"fmt"    // For formatted output to the console
-	"log"    // For logging debug information
-	"os"     // For accessing stdin/stdout/stderr
+	"flag"    // For parsing command-line flags
+	"fmt"     // For formatted output to the console
+	"log"     // For logging debug information
+	"os"      // For accessing stdin/stdout/stderr
 
 	"github.com/anthropics/anthropic-sdk-go" // Anthropic's official Go SDK
 )
@@ -30,8 +30,8 @@ func main() {
 	} else {
 		// In normal mode, minimal logging to stdout
 		log.SetOutput(os.Stdout)
-		log.SetFlags(0)        // No timestamps or file info
-		log.SetPrefix("")      // No prefix
+		log.SetFlags(0)   // No timestamps or file info
+		log.SetPrefix("") // No prefix
 	}
 
 	// Initialize the Anthropic API client
@@ -43,7 +43,7 @@ func main() {
 
 	// Set up a scanner to read user input from stdin (terminal)
 	scanner := bufio.NewScanner(os.Stdin)
-	
+
 	// Define a function to get user messages from the scanner
 	// Returns: (message string, ok bool) where ok=false means input ended (EOF/Ctrl-D)
 	getUserMessage := func() (string, bool) {
@@ -77,9 +77,9 @@ func NewAgent(client *anthropic.Client, getUserMessage func() (string, bool), ve
 // Agent manages the chat conversation with Claude
 // It maintains the conversation history and handles the interaction loop
 type Agent struct {
-	client         *anthropic.Client           // API client for communicating with Claude
-	getUserMessage func() (string, bool)       // Function to get user input
-	verbose        bool                        // Flag for enabling detailed logging
+	client         *anthropic.Client     // API client for communicating with Claude
+	getUserMessage func() (string, bool) // Function to get user input
+	verbose        bool                  // Flag for enabling detailed logging
 }
 
 // Run starts the interactive chat session
@@ -102,7 +102,7 @@ func (a *Agent) Run(ctx context.Context) error {
 	for {
 		// Print colored prompt: "\u001b[94m" = blue color, "\u001b[0m" = reset color
 		fmt.Print("\u001b[94mYou\u001b[0m: ")
-		
+
 		// Get the next line of user input
 		userInput, ok := a.getUserMessage()
 		if !ok {
@@ -142,7 +142,7 @@ func (a *Agent) Run(ctx context.Context) error {
 			}
 			return err
 		}
-		
+
 		// Add Claude's response to the conversation history
 		// ToParam() converts the Message to a MessageParam for the next API call
 		conversation = append(conversation, message.ToParam())
@@ -172,6 +172,7 @@ func (a *Agent) Run(ctx context.Context) error {
 // Parameters:
 //   - ctx: Context for the API request (for timeouts, cancellation, etc.)
 //   - conversation: The full conversation history (all messages so far)
+//
 // Returns:
 //   - *anthropic.Message: Claude's response message
 //   - error: Any error that occurred during the API call
