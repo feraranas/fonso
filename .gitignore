@@ -16,6 +16,9 @@ go.work
 
 # Compiled binaries
 chat-basic
+chat-single-tool
+chat-multi-tool
+# Legacy names (keep for compatibility)
 chat-tools
 
 # Dependency directories
