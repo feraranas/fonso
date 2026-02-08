@@ -45,3 +45,6 @@ fonso
 # documentation
 how-to-build-a-coding-agent/
 docs/
+
+#nix
+.devenv.flake.nix

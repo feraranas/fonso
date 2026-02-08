@@ -4,12 +4,12 @@
       vars = {
   version = "1.11.2";
   system = "aarch64-darwin";
-  devenv_root = "/Users/fernankiwi/ai-projects/fonso";
-  project_input_ref = "path:/Users/fernankiwi/ai-projects/fonso";
-  devenv_dotfile = "/Users/fernankiwi/ai-projects/fonso/.devenv";
+  devenv_root = "/Users/fernankiwi/ai-projects/internal/fonso";
+  project_input_ref = "path:/Users/fernankiwi/ai-projects/internal/fonso";
+  devenv_dotfile = "/Users/fernankiwi/ai-projects/internal/fonso/.devenv";
   devenv_dotfile_path = ./.devenv;
   devenv_tmpdir = "/var/folders/9_/j5jkyytd56sc8gwljz4lg9700000gn/T/";
-  devenv_runtime = "/var/folders/9_/j5jkyytd56sc8gwljz4lg9700000gn/T/devenv-89e9ec9";
+  devenv_runtime = "/var/folders/9_/j5jkyytd56sc8gwljz4lg9700000gn/T/devenv-f6d28f5";
   devenv_istesting = false;
   devenv_direnvrc_latest_version = 1;
   container_name = null;
@@ -17,7 +17,7 @@
   ];
   hostname = "Fernandos-MacBook-Air-7.local";
   username = "fernankiwi";
-  git_root = "/Users/fernankiwi/ai-projects/fonso";
+  git_root = "/Users/fernankiwi/ai-projects/internal/fonso";
   secretspec = null;
 };
     in
@@ -41,12 +41,12 @@
       vars = {
   version = "1.11.2";
   system = "aarch64-darwin";
-  devenv_root = "/Users/fernankiwi/ai-projects/fonso";
-  project_input_ref = "path:/Users/fernankiwi/ai-projects/fonso";
-  devenv_dotfile = "/Users/fernankiwi/ai-projects/fonso/.devenv";
+  devenv_root = "/Users/fernankiwi/ai-projects/internal/fonso";
+  project_input_ref = "path:/Users/fernankiwi/ai-projects/internal/fonso";
+  devenv_dotfile = "/Users/fernankiwi/ai-projects/internal/fonso/.devenv";
   devenv_dotfile_path = ./.devenv;
   devenv_tmpdir = "/var/folders/9_/j5jkyytd56sc8gwljz4lg9700000gn/T/";
-  devenv_runtime = "/var/folders/9_/j5jkyytd56sc8gwljz4lg9700000gn/T/devenv-89e9ec9";
+  devenv_runtime = "/var/folders/9_/j5jkyytd56sc8gwljz4lg9700000gn/T/devenv-f6d28f5";
   devenv_istesting = false;
   devenv_direnvrc_latest_version = 1;
   container_name = null;
@@ -54,7 +54,7 @@
   ];
   hostname = "Fernandos-MacBook-Air-7.local";
   username = "fernankiwi";
-  git_root = "/Users/fernankiwi/ai-projects/fonso";
+  git_root = "/Users/fernankiwi/ai-projects/internal/fonso";
   secretspec = null;
 };
       devenv =
