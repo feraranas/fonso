@@ -2,7 +2,7 @@
 // This file contains common setup code used by both the basic chat (chat.go)
 // and the advanced tool-based chat (read.go)
 
-package main
+package common
 
 import (
 	"bufio"
