@@ -1,94 +1,74 @@
 // chat.go - A simple command-line chat application that communicates with Claude AI
+// This is the BASIC example showing fundamental conversation flow without any tools.
+//
+// Learning Path:
+// 1. Start here (chat.go) - Learn basic request/response with Claude
+// 2. Then see read.go - Learn how to add tool usage (function calling)
+//
 // This program creates an interactive chat session where users can send messages
 // and receive responses from the Claude AI model via the Anthropic API.
 
 package main
 
 import (
-	"bufio"   // For reading user input line by line
 	"context" // For managing API request contexts
-	"flag"    // For parsing command-line flags
 	"fmt"     // For formatted output to the console
 	"log"     // For logging debug information
-	"os"      // For accessing stdin/stdout/stderr
 
 	"github.com/anthropics/anthropic-sdk-go" // Anthropic's official Go SDK
 )
 
 func main() {
-	// Parse command-line flags
-	// The -verbose flag enables detailed logging for debugging purposes
-	verbose := flag.Bool("verbose", false, "enable verbose logging")
-	flag.Parse()
+	// Use shared utility functions from common.go
+	verbose := ParseFlags()
+	SetupLogging(verbose)
+	client := InitClient(verbose)
+	getUserMessage := CreateInputReader()
 
-	// Configure logging based on verbose mode
-	if *verbose {
-		// In verbose mode, log to stderr with timestamps and file locations
-		log.SetOutput(os.Stderr)
-		log.SetFlags(log.LstdFlags | log.Lshortfile) // Include date, time, and file:line
-		log.Println("Verbose logging enabled")
-	} else {
-		// In normal mode, minimal logging to stdout
-		log.SetOutput(os.Stdout)
-		log.SetFlags(0)   // No timestamps or file info
-		log.SetPrefix("") // No prefix
-	}
-
-	// Initialize the Anthropic API client
-	// The client automatically reads the API key from the ANTHROPIC_API_KEY environment variable
-	client := anthropic.NewClient()
-	if *verbose {
-		log.Println("Anthropic client initialized")
-	}
-
-	// Set up a scanner to read user input from stdin (terminal)
-	scanner := bufio.NewScanner(os.Stdin)
-
-	// Define a function to get user messages from the scanner
-	// Returns: (message string, ok bool) where ok=false means input ended (EOF/Ctrl-D)
-	getUserMessage := func() (string, bool) {
-		if !scanner.Scan() {
-			return "", false // Input stream ended
-		}
-		return scanner.Text(), true // Return the line of text entered by user
-	}
-
-	// Create and run the chat agent
-	agent := NewAgent(&client, getUserMessage, *verbose)
-	err := agent.Run(context.TODO()) // context.TODO() is a placeholder context
+	// Create and run the basic chat agent (no tools)
+	agent := NewBasicAgent(&client, getUserMessage, verbose)
+	err := agent.Run(context.TODO())
 	if err != nil {
 		fmt.Printf("Error: %s\n", err.Error())
 	}
 }
 
-// NewAgent creates a new chat agent instance
+// NewBasicAgent creates a new basic chat agent (without tool support)
 // Parameters:
 //   - client: The Anthropic API client for making requests
 //   - getUserMessage: A function that retrieves the next user message from input
 //   - verbose: Whether to enable detailed logging
-func NewAgent(client *anthropic.Client, getUserMessage func() (string, bool), verbose bool) *Agent {
-	return &Agent{
+func NewBasicAgent(client *anthropic.Client, getUserMessage func() (string, bool), verbose bool) *BasicAgent {
+	return &BasicAgent{
 		client:         client,
 		getUserMessage: getUserMessage,
 		verbose:        verbose,
 	}
 }
 
-// Agent manages the chat conversation with Claude
-// It maintains the conversation history and handles the interaction loop
-type Agent struct {
+// BasicAgent manages a simple chat conversation with Claude
+// This is the foundational agent that demonstrates core concepts:
+// - Maintaining conversation history
+// - Making API calls to Claude
+// - Displaying responses
+//
+// Key limitation: Cannot use tools (see ToolAgent in read.go for that)
+type BasicAgent struct {
 	client         *anthropic.Client     // API client for communicating with Claude
 	getUserMessage func() (string, bool) // Function to get user input
 	verbose        bool                  // Flag for enabling detailed logging
 }
 
 // Run starts the interactive chat session
-// This is the main loop that:
-// 1. Gets user input
-// 2. Sends it to Claude
-// 3. Displays Claude's response
-// 4. Repeats until user quits (Ctrl-C or Ctrl-D)
-func (a *Agent) Run(ctx context.Context) error {
+// This is the main loop that demonstrates the basic conversation pattern:
+// 1. Get user input
+// 2. Send it to Claude
+// 3. Display Claude's response
+// 4. Repeat until user quits (Ctrl-C or Ctrl-D)
+//
+// Note: This is a simple linear conversation. See read.go for the advanced
+// version with tool usage that requires a nested loop for tool execution.
+func (a *BasicAgent) Run(ctx context.Context) error {
 	// Initialize an empty conversation history
 	// This slice stores all messages (both user and assistant) in order
 	conversation := []anthropic.MessageParam{}
@@ -169,6 +149,8 @@ func (a *Agent) Run(ctx context.Context) error {
 }
 
 // runInference makes an API call to Claude with the current conversation
+// This is the basic version without tool support.
+//
 // Parameters:
 //   - ctx: Context for the API request (for timeouts, cancellation, etc.)
 //   - conversation: The full conversation history (all messages so far)
@@ -176,7 +158,7 @@ func (a *Agent) Run(ctx context.Context) error {
 // Returns:
 //   - *anthropic.Message: Claude's response message
 //   - error: Any error that occurred during the API call
-func (a *Agent) runInference(ctx context.Context, conversation []anthropic.MessageParam) (*anthropic.Message, error) {
+func (a *BasicAgent) runInference(ctx context.Context, conversation []anthropic.MessageParam) (*anthropic.Message, error) {
 	if a.verbose {
 		log.Printf("Making API call to Claude with model: %s", anthropic.ModelClaude3_7SonnetLatest)
 	}
