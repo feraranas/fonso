@@ -1,82 +1,18 @@
-// read.go - ADVANCED chat application with tool usage (function calling)
-// This builds upon the basic chat in chat.go by adding tools (function calling).
-//
-// Learning Path:
-// 1. First understand chat.go - Basic request/response pattern
-// 2. Now this file (read.go) - How to add tools that Claude can call
-//
-// Key New Concepts vs chat.go:
-// - ToolDefinition: Defines functions Claude can call
-// - Nested Loop: One loop for user input, another for tool execution
-// - Tool Results: Sending function results back to Claude
-//
-// Tool Usage Flow:
-// 1. User asks: "What's in README.md?"
-// 2. Claude responds with a tool_use request for read_file("README.md")
-// 3. Program executes the tool and returns the file contents
-// 4. Claude receives the results and provides a natural language answer
-
-package main
+// tool.go - ToolAgent implementation (supports all tool-based agents)
+package agent
 
 import (
-	"context"       // For managing API request contexts
-	"encoding/json" // For parsing tool inputs/outputs as JSON
-	"fmt"           // For formatted output to the console
-	"log"           // For logging debug information
-	"os"            // For file operations
+	"context"
+	"fmt"
+	"log"
 
-	"github.com/anthropics/anthropic-sdk-go" // Anthropic's official Go SDK
-	"github.com/invopop/jsonschema"          // For generating JSON schemas from Go structs
+	"github.com/anthropics/anthropic-sdk-go"
+	"github.com/fernankiwi/fonso/internal/tools"
 )
-
-func main() {
-	// Use shared utility functions from common.go (same as chat.go)
-	verbose := ParseFlags()
-	SetupLogging(verbose)
-	client := InitClient(verbose)
-	getUserMessage := CreateInputReader()
-
-	// NEW: Define the tools available to Claude
-	// Currently only has read_file tool, but you can add more tools here
-	// (e.g., write_file, list_directory, execute_command, etc.)
-	tools := []ToolDefinition{ReadFileDefinition}
-	if verbose {
-		log.Printf("Initialized %d tools", len(tools))
-	}
-
-	// Create and run the agent with tool support
-	agent := NewToolAgent(&client, getUserMessage, tools, verbose)
-	err := agent.Run(context.TODO())
-	if err != nil {
-		fmt.Printf("Error: %s\n", err.Error())
-	}
-}
-
-// NewToolAgent creates a new chat agent with tool usage capabilities
-// This extends the BasicAgent concept from chat.go by adding tool support.
-//
-// Parameters:
-//   - client: The Anthropic API client
-//   - getUserMessage: Function to get user input (same as BasicAgent)
-//   - tools: NEW - List of tools that Claude can use (e.g., read_file)
-//   - verbose: Enable detailed logging
-func NewToolAgent(
-	client *anthropic.Client,
-	getUserMessage func() (string, bool),
-	tools []ToolDefinition,
-	verbose bool,
-) *ToolAgent {
-	return &ToolAgent{
-		client:         client,
-		getUserMessage: getUserMessage,
-		tools:          tools,
-		verbose:        verbose,
-	}
-}
 
 // ToolAgent manages conversations with Claude and executes tools when requested
 //
-// Comparison with BasicAgent (chat.go):
+// Comparison with BasicAgent:
 // - BasicAgent: Simple linear loop (user input → Claude response → repeat)
 // - ToolAgent: Nested loop with tool execution (user input → Claude response → tools → repeat)
 //
@@ -86,15 +22,44 @@ func NewToolAgent(
 // - Send the results back to Claude
 // - Continue the conversation with the tool results in a loop
 type ToolAgent struct {
-	client         *anthropic.Client     // API client for Claude
-	getUserMessage func() (string, bool) // Function to get user input
-	tools          []ToolDefinition      // Available tools Claude can use
-	verbose        bool                  // Enable detailed logging
+	client         *anthropic.Client           // API client for Claude
+	getUserMessage func() (string, bool)       // Function to get user input
+	tools          []tools.ToolDefinition      // Available tools Claude can use
+	verbose        bool                        // Enable detailed logging
+	welcomeMsg     string                      // Welcome message to display
+}
+
+// NewToolAgent creates a new chat agent with tool usage capabilities
+// This extends the BasicAgent concept by adding tool support.
+//
+// Parameters:
+//   - client: The Anthropic API client
+//   - getUserMessage: Function to get user input (same as BasicAgent)
+//   - tools: List of tools that Claude can use (e.g., read_file)
+//   - verbose: Enable detailed logging
+//   - welcomeMsg: Optional welcome message (empty string uses default)
+func NewToolAgent(
+	client *anthropic.Client,
+	getUserMessage func() (string, bool),
+	toolList []tools.ToolDefinition,
+	verbose bool,
+	welcomeMsg string,
+) *ToolAgent {
+	if welcomeMsg == "" {
+		welcomeMsg = "Chat with Claude (use 'ctrl-c' to quit)"
+	}
+	return &ToolAgent{
+		client:         client,
+		getUserMessage: getUserMessage,
+		tools:          toolList,
+		verbose:        verbose,
+		welcomeMsg:     welcomeMsg,
+	}
 }
 
 // Run starts the interactive chat session with tool support
 //
-// Key Difference from BasicAgent.Run() in chat.go:
+// Key Difference from BasicAgent.Run():
 // - BasicAgent has ONE loop (get input → send → display response)
 // - ToolAgent has TWO NESTED loops (outer: get input, inner: tool execution)
 //
@@ -112,7 +77,7 @@ func (a *ToolAgent) Run(ctx context.Context) error {
 	if a.verbose {
 		log.Println("Starting chat session with tools enabled")
 	}
-	fmt.Println("Chat with Claude (use 'ctrl-c' to quit)")
+	fmt.Println(a.welcomeMsg)
 
 	// Outer loop: Get user input
 	for {
@@ -273,7 +238,7 @@ func (a *ToolAgent) Run(ctx context.Context) error {
 
 // runInference makes an API call to Claude with the conversation and available tools
 //
-// Key Difference from BasicAgent.runInference() in chat.go:
+// Key Difference from BasicAgent.runInference():
 // - BasicAgent: Simple API call with just messages
 // - ToolAgent: API call includes tool definitions (the Tools parameter)
 //
@@ -315,99 +280,4 @@ func (a *ToolAgent) runInference(ctx context.Context, conversation []anthropic.M
 	}
 
 	return message, err
-}
-
-// ToolDefinition defines a function that Claude can call
-// Each tool has:
-// - Name: The identifier Claude uses to call it
-// - Description: Tells Claude when and how to use this tool
-// - InputSchema: JSON schema describing the parameters
-// - Function: The actual Go function to execute
-type ToolDefinition struct {
-	Name        string                                      `json:"name"`
-	Description string                                      `json:"description"`
-	InputSchema anthropic.ToolInputSchemaParam              `json:"input_schema"`
-	Function    func(input json.RawMessage) (string, error) // Takes JSON input, returns string result
-}
-
-// ReadFileDefinition is the tool that allows Claude to read files
-// When Claude receives a question like "What's in README.md?", it can:
-// 1. Decide to call read_file tool
-// 2. Provide the path parameter: {"path": "README.md"}
-// 3. Receive the file contents as the result
-// 4. Use the contents to answer the user's question
-var ReadFileDefinition = ToolDefinition{
-	Name:        "read_file",
-	Description: "Read the contents of a given relative file path. Use this when you want to see what's inside a file. Do not use this with directory names.",
-	InputSchema: ReadFileInputSchema, // Defines that it takes a "path" parameter
-	Function:    ReadFile,            // Points to the actual implementation
-}
-
-// ReadFileInput defines the parameters for the read_file tool
-// The struct tags are used to generate the JSON schema:
-// - json:"path" - The parameter name in JSON
-// - jsonschema_description - Description shown to Claude about this parameter
-type ReadFileInput struct {
-	Path string `json:"path" jsonschema_description:"The relative path of a file in the working directory."`
-}
-
-// Generate the JSON schema from the struct
-// This schema tells Claude exactly what format to use when calling the tool
-var ReadFileInputSchema = GenerateSchema[ReadFileInput]()
-
-// ReadFile is the actual implementation of the read_file tool
-// It receives JSON input, parses it, reads the file, and returns the contents
-func ReadFile(input json.RawMessage) (string, error) {
-	// Parse the JSON input to extract the path parameter
-	readFileInput := ReadFileInput{}
-	err := json.Unmarshal(input, &readFileInput)
-	if err != nil {
-		panic(err)
-	}
-
-	log.Printf("Reading file: %s", readFileInput.Path)
-
-	// Read the file from the filesystem
-	content, err := os.ReadFile(readFileInput.Path)
-	if err != nil {
-		// If file doesn't exist or can't be read, return error
-		log.Printf("Failed to read file %s: %v", readFileInput.Path, err)
-		return "", err
-	}
-
-	log.Printf("Successfully read file %s (%d bytes)", readFileInput.Path, len(content))
-
-	// Return file contents as a string
-	return string(content), nil
-}
-
-// GenerateSchema generates a JSON schema from a Go struct using generics
-// This is a helper function that automatically creates the schema Claude needs
-// to understand what parameters a tool accepts
-//
-// Example: GenerateSchema[ReadFileInput]() produces a schema like:
-//
-//	{
-//	  "type": "object",
-//	  "properties": {
-//	    "path": {
-//	      "type": "string",
-//	      "description": "The relative path of a file in the working directory."
-//	    }
-//	  },
-//	  "required": ["path"]
-//	}
-func GenerateSchema[T any]() anthropic.ToolInputSchemaParam {
-	reflector := jsonschema.Reflector{
-		AllowAdditionalProperties: false, // Strict: only allow defined properties
-		DoNotReference:            true,  // Inline all definitions instead of using $ref
-	}
-	var v T
-
-	// Use reflection to generate the schema from the struct
-	schema := reflector.Reflect(v)
-
-	return anthropic.ToolInputSchemaParam{
-		Properties: schema.Properties, // The field definitions from the struct
-	}
 }
