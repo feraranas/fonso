@@ -18,6 +18,7 @@ go.work
 chat-basic
 chat-single-tool
 chat-multi-tool
+chat-bash-agent
 # Legacy names (keep for compatibility)
 chat-tools
 
