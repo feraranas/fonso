@@ -21,6 +21,16 @@ type ToolDefinition struct {
 	Function    func(input json.RawMessage) (string, error) // Takes JSON input, returns string result
 }
 
+// AllTools contains all built-in tool definitions.
+var AllTools = []ToolDefinition{
+	ReadFileDefinition,
+	ListFilesDefinition,
+	BashDefinition,
+	EditFileDefinition,
+	CodeSearchDefinition,
+	ApiCallDefinition,
+}
+
 // GenerateSchema generates a JSON schema from a Go struct using generics
 // This is a helper function that automatically creates the schema Claude needs
 // to understand what parameters a tool accepts
