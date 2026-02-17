@@ -11,7 +11,7 @@ import (
 )
 
 type HelloInput struct {
-	Name string `json:"name" jsonschema:"description=The name to greet"`
+	Name string `json:"name" jsonschema:"The name to greet"`
 }
 
 type TimestampInput struct{}
