@@ -1,3 +1,5 @@
+Fonso Coding Agent
+
 ✅ Prerequisites
 
 - Go 1.24.2+ or devenv (recommended for easy setup)
