@@ -34,7 +34,7 @@ Notes:
 - The access token is refreshed automatically (it lasts about an hour). If the refresh token is revoked or expires, re-run step 1.
 - `--openai-auth official` (default) uses OpenAI's documented "Sign in with ChatGPT" flow for open-source clients (dynamic client registration, public Responses API). Which models you can use is decided by your plan; usage counts against your ChatGPT limits (see https://chatgpt.com/settings/usage).
 - `--openai-auth opencode` reuses opencode's/Codex's client id and the `chatgpt.com/backend-api/codex` endpoint. fonso is not a registered client for that id, so treat it as unsanctioned and use the official mode unless you have a reason not to.
-- `--model` currently applies to the OpenAI provider only.
+- `--model` also works with the default Anthropic provider, and `--max-tokens N` raises its 1024-token response limit. `--max-tokens` is rejected for `openai-chatgpt`, whose route does not accept `max_output_tokens`.
 
 ### What can this agent do?
 1. Talks to claude

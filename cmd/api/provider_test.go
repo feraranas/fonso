@@ -54,7 +54,8 @@ func TestProviderFlagValidation(t *testing.T) {
 		want string
 	}{
 		{"unknown provider", providerOptions{Name: "bogus"}, "unknown --provider"},
-		{"model without openai", providerOptions{Name: providerAnthropic, Model: "gpt-5.5"}, "--model is only supported"},
+		{"max tokens with openai", providerOptions{Name: providerOpenAI, MaxTokens: 4096}, "--max-tokens is not supported"},
+		{"negative max tokens", providerOptions{Name: providerAnthropic, MaxTokens: -1}, "must be positive"},
 		{"bad auth flavour", providerOptions{Name: providerOpenAI, OpenAIAuth: "nope"}, "unknown --openai-auth"},
 	}
 	for _, tc := range cases {
@@ -62,5 +63,13 @@ func TestProviderFlagValidation(t *testing.T) {
 		if err == nil || !strings.Contains(err.Error(), tc.want) {
 			t.Errorf("%s: err = %v", tc.name, err)
 		}
+	}
+}
+
+func TestAnthropicOverridesFlowThrough(t *testing.T) {
+	client := anthropic.NewClient()
+	p, _, err := newProvider(providerOptions{Name: providerAnthropic, Model: "claude-test-model", MaxTokens: 2048}, func() *anthropic.Client { return &client })
+	if err != nil || p.ModelName() != "claude-test-model" {
+		t.Fatalf("provider = %v err=%v", p, err)
 	}
 }

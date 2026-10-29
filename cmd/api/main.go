@@ -21,7 +21,8 @@ import (
 
 func main() {
 	providerName := flag.String("provider", providerAnthropic, "model provider: "+providerAnthropic+" (default) or "+providerOpenAI)
-	model := flag.String("model", "", "model slug for --provider "+providerOpenAI+" (default "+agent.DefaultOpenAIModel+")")
+	model := flag.String("model", "", "model slug (default: "+string(agent.DefaultAnthropicModel)+" for anthropic, "+agent.DefaultOpenAIModel+" for "+providerOpenAI+")")
+	maxTokens := flag.Int64("max-tokens", 0, "max response tokens for --provider anthropic (default 1024)")
 	openAIAuth := flag.String("openai-auth", string(openai.ModeOfficial), "OAuth flavour for "+providerOpenAI+": official (documented Sign in with ChatGPT) or opencode (reuses opencode's client id; unsanctioned)")
 	login := flag.Bool("login", false, "sign in with ChatGPT in your browser, save credentials, and exit (needs --provider "+providerOpenAI+")")
 	verbose := common.ParseFlags()
@@ -30,7 +31,7 @@ func main() {
 
 	ctx := context.TODO()
 
-	opts := providerOptions{Name: *providerName, Model: *model, OpenAIAuth: *openAIAuth, Verbose: verbose}
+	opts := providerOptions{Name: *providerName, Model: *model, MaxTokens: *maxTokens, OpenAIAuth: *openAIAuth, Verbose: verbose}
 
 	if *login {
 		if opts.Name != providerOpenAI {
