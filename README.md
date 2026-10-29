@@ -16,6 +16,26 @@ Fonso Coding Agent
 
 `export ANTHROPIC_API_KEY="your-api-key-here"`
 
+### Use your ChatGPT plan instead of an API key (`cmd/api` only)
+
+`cmd/api` can run its agent loop on your ChatGPT subscription through OAuth. The default stays Anthropic.
+
+```bash
+# 1. Sign in once. Opens your browser, listens on 127.0.0.1:1455, saves
+#    ~/.config/fonso/openai-auth.json (mode 0600). Tokens are never printed.
+go run ./cmd/api --provider openai-chatgpt --login
+
+# 2. Run the agent on your ChatGPT plan (optionally pick a model).
+go run ./cmd/api --provider openai-chatgpt
+go run ./cmd/api --provider openai-chatgpt --model gpt-5.4-mini
+```
+
+Notes:
+- The access token is refreshed automatically (it lasts about an hour). If the refresh token is revoked or expires, re-run step 1.
+- `--openai-auth official` (default) uses OpenAI's documented "Sign in with ChatGPT" flow for open-source clients (dynamic client registration, public Responses API). Which models you can use is decided by your plan; usage counts against your ChatGPT limits (see https://chatgpt.com/settings/usage).
+- `--openai-auth opencode` reuses opencode's/Codex's client id and the `chatgpt.com/backend-api/codex` endpoint. fonso is not a registered client for that id, so treat it as unsanctioned and use the official mode unless you have a reason not to.
+- `--model` currently applies to the OpenAI provider only.
+
 ### What can this agent do?
 1. Talks to claude
 2. **File Reader** — read code files [tool](./internal/tools/read_file.go)
