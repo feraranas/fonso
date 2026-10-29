@@ -134,7 +134,7 @@ Uses `github.com/invopop/jsonschema` with Go generics to automatically generate 
 
 ## Model Configuration
 
-Currently uses `anthropic.ModelClaude3_7SonnetLatest` with 1024 max tokens. To change model or increase token limit, modify the `runInference` method in `internal/agent/basic.go` or `internal/agent/tool.go`.
+`cmd/api` defaults to `anthropic.ModelClaude3_7SonnetLatest` with 1024 max tokens; override with `--model` and `--max-tokens` (see `AnthropicProvider` in `internal/agent/anthropic.go`). `BasicAgent` (`internal/agent/basic.go`) still hard-codes both.
 
 ## Code Search
 
@@ -147,7 +147,7 @@ The `code_search` tool uses ripgrep for fast pattern matching:
 
 ## Testing
 
-There are currently no test files in this project. When adding tests, follow Go conventions:
+Tests live next to the code they cover. When adding tests, follow Go conventions:
 - Name test files `*_test.go`
 - Place tests next to the code they test
 - Run tests with `go test ./...`

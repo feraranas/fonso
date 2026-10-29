@@ -9,19 +9,44 @@ import (
 	"github.com/fernankiwi/fonso/internal/tools"
 )
 
+// Defaults preserve the original hard-coded behaviour.
+const (
+	DefaultAnthropicModel     = anthropic.ModelClaude3_7SonnetLatest
+	DefaultAnthropicMaxTokens = int64(1024)
+)
+
 // AnthropicProvider talks to Claude through the Messages API.
 type AnthropicProvider struct {
-	client  *anthropic.Client
-	verbose bool
+	client    *anthropic.Client
+	verbose   bool
+	model     anthropic.Model
+	maxTokens int64
 }
 
-// NewAnthropicProvider wraps an existing Anthropic client.
+// NewAnthropicProvider wraps an existing Anthropic client using the default
+// model (claude-3-7-sonnet-latest) and 1024 max tokens.
 func NewAnthropicProvider(client *anthropic.Client, verbose bool) *AnthropicProvider {
-	return &AnthropicProvider{client: client, verbose: verbose}
+	return &AnthropicProvider{client: client, verbose: verbose, model: DefaultAnthropicModel, maxTokens: DefaultAnthropicMaxTokens}
+}
+
+// WithModel overrides the model; an empty value keeps the current one.
+func (p *AnthropicProvider) WithModel(model string) *AnthropicProvider {
+	if model != "" {
+		p.model = anthropic.Model(model)
+	}
+	return p
+}
+
+// WithMaxTokens overrides the response limit; a value <= 0 keeps the current one.
+func (p *AnthropicProvider) WithMaxTokens(n int64) *AnthropicProvider {
+	if n > 0 {
+		p.maxTokens = n
+	}
+	return p
 }
 
 func (p *AnthropicProvider) Label() string     { return "Claude" }
-func (p *AnthropicProvider) ModelName() string { return string(anthropic.ModelClaude3_7SonnetLatest) }
+func (p *AnthropicProvider) ModelName() string { return string(p.model) }
 
 func (p *AnthropicProvider) NewConversation(toolList []tools.ToolDefinition) Conversation {
 	anthropicTools := []anthropic.ToolUnionParam{}
@@ -59,11 +84,11 @@ func (c *anthropicConversation) ToolResults(ctx context.Context, results []ToolR
 
 func (c *anthropicConversation) infer(ctx context.Context) (Reply, error) {
 	if c.p.verbose {
-		log.Printf("Making API call to Claude with model: %s and %d tools", anthropic.ModelClaude3_7SonnetLatest, len(c.tools))
+		log.Printf("Making API call to Claude with model: %s and %d tools", c.p.model, len(c.tools))
 	}
 	message, err := c.p.client.Messages.New(ctx, anthropic.MessageNewParams{
-		Model:     anthropic.ModelClaude3_7SonnetLatest,
-		MaxTokens: int64(1024),
+		Model:     c.p.model,
+		MaxTokens: c.p.maxTokens,
 		Messages:  c.history,
 		Tools:     c.tools,
 	})

@@ -123,3 +123,31 @@ func TestAnthropicDefaultPathUnchanged(t *testing.T) {
 		}
 	}
 }
+
+func TestAnthropicModelAndMaxTokensOverride(t *testing.T) {
+	var got map[string]any
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_ = json.NewDecoder(r.Body).Decode(&got)
+		w.Header().Set("Content-Type", "application/json")
+		fmt.Fprint(w, `{"id":"m","type":"message","role":"assistant","model":"x","stop_reason":"end_turn","usage":{"input_tokens":1,"output_tokens":1},"content":[{"type":"text","text":"ok"}]}`)
+	}))
+	defer srv.Close()
+	client := anthropic.NewClient(option.WithBaseURL(srv.URL), option.WithAPIKey("k"), option.WithMaxRetries(0))
+
+	p := NewAnthropicProvider(&client, false).WithModel("claude-test-model").WithMaxTokens(4096)
+	if _, err := p.NewConversation(nil).UserMessage(context.Background(), "hi"); err != nil {
+		t.Fatal(err)
+	}
+	if got["model"] != "claude-test-model" || got["max_tokens"] != float64(4096) || p.ModelName() != "claude-test-model" {
+		t.Errorf("override not applied: %v", got)
+	}
+
+	// Zero values keep the defaults.
+	p = NewAnthropicProvider(&client, false).WithModel("").WithMaxTokens(0)
+	if _, err := p.NewConversation(nil).UserMessage(context.Background(), "hi"); err != nil {
+		t.Fatal(err)
+	}
+	if got["model"] != "claude-3-7-sonnet-latest" || got["max_tokens"] != float64(1024) {
+		t.Errorf("defaults changed: %v", got)
+	}
+}
